@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <windows.h>
+#include <Mmsystem.h>
 
-#define PAGENUM 5000		//需要访问的数据的数量(有重复)
+#define PAGENUM 50000		//需要访问的数据的数量(有重复)
 #define PAGEDIFFN 1000		//数据中不同的页号数量(无重复)
 #define BUFFERNUM 400		//buffer的数量
 #define SLICESIZE 3			//替换的片的大小
@@ -21,6 +23,7 @@ int SRC[] = { 0, 9, 8, 4, 4, 3, 6, 5, 1, 5, 0,
 */
 
 int SRC[PAGENUM];//作业5需要
+int HitHash[PAGEDIFFN];
 
 
 typedef struct page {
@@ -37,12 +40,25 @@ void init_SRC() {
 	int conNum = 1;
 	srand((unsigned)time(NULL));
 	for (i = 0; i < PAGENUM; i+=conNum) {
-		SRC[i] = rand() % 1000;
-		conNum = rand() % 10 + 1;
+		SRC[i] = rand() % PAGEDIFFN;		
+		conNum = rand() % 20 + 1;
 		for (j = 0; j < conNum; j++) {
-			if (i + j > PAGENUM) printf("error in init_SRC: i + j > PAGENUM\n");
-			SRC[i + j] = SRC[i] + j;
+			if (i + j >= PAGENUM) {
+				printf("error in init_SRC: i + j > PAGENUM\n");
+				break;
+			}
+			SRC[i + j] = (SRC[i] + j) % PAGEDIFFN;
 		}
+		
+	}
+	
+}
+
+void init_HitHash() {
+	//init HitHash
+	int i;
+	for (i = 0; i < PAGEDIFFN; i++) {
+		HitHash[i] = -1;
 	}
 }
 
@@ -85,11 +101,12 @@ int Check(int n, PPage array) {
 
 //检查某页是否在内存,若存在，返回所在下标,pageN为SRC[i],n为内存中页框数
 int Equation(int pageN, int n, PPage array) {
-	int i;
+	/*int i;
 	for (i = 0; i < n; i++) {
 		if (array[i].num == pageN) return i;
 	}
-	return -1;
+	*/
+	return HitHash[pageN];
 }
 
 
@@ -169,27 +186,37 @@ int LRU(int n) {
 	}
 	for (i = 0; i < PAGENUM; i++) {
 		if (Equation(SRC[i], n, pageArray) == -1) {//如果当前页号不在内存中
+			
 			for (j = 0; j < n; j++) {
 				if (pageArray[j].num != -1) pageArray[j].time++;
 			}
-			if (Check(n, pageArray) == -1) {//当前物理内存已满，进行替换操作
+			
+			int checkPos = Check(n, pageArray);
+			if (checkPos == -1) {//当前物理内存已满，进行替换操作
 				pos = GetMax(n, pageArray);
+				//pos = GetMin(n, pageArray);
+				HitHash[pageArray[pos].num] = -1;
 				pageArray[pos].num = SRC[i];
 				pageArray[pos].time = 0;
+				//pageArray[pos].time = GetTickCount();
+				HitHash[SRC[i]] = pos;
 			}
 			else {
-				pageArray[Check(n, pageArray)].num = SRC[i];//内存未满,向内添加
-				pageArray[Check(n, pageArray)].time = 0;
+				HitHash[pageArray[checkPos].num] = -1;
+				pageArray[checkPos].num = SRC[i];//内存未满,向内添加
+				pageArray[checkPos].time = 0;
+				//pageArray[checkPos].time = GetTickCount();
+				HitHash[SRC[i]] = checkPos;
 
 			}
 			breakNum++;//该页不在内存中缺页数量+1
 		}
 		else {
-
 			for (j = 0; j < n; j++) {
 				if (j == Equation(SRC[i], n, pageArray))pageArray[j].time = 0;//存在内存中,将时间置为0
 				else if (pageArray[j].num != -1) pageArray[j].time++;
 			}
+
 		}
 	}
 	return breakNum;
@@ -214,7 +241,6 @@ int GetMax_extention(int n, PPage array, int sliceSize) {
 	return pos;
 }
 //改进的LRU算法,成片和装入，参数为buffer页框数和片的大小
-//尚未考虑重复装入的问题
 int LRU_extention(int n, int sliceSize) {
 	int i;//循环变量
 	int j;//循环变量
@@ -231,14 +257,17 @@ int LRU_extention(int n, int sliceSize) {
 			for (j = 0; j < n; j++) {
 				if (pageArray[j].num != -1) pageArray[j].time++;
 			}
-			if (Check(n, pageArray) == -1) {//当前物理内存已满，进行替换操作
+			int checkPos = Check(n, pageArray);
+			if (checkPos == -1) {//当前物理内存已满，进行替换操作
 				//pos = GetMax_extention(n, pageArray, sliceSize);
 				pos = GetMax(n, pageArray);
 				int temp = 0;
 				for (j = 0; temp < sliceSize && pos + j < n; temp++) {
 					if (j == 0 || Equation((SRC[i] + temp) % PAGEDIFFN, n, pageArray) == -1) {
+						HitHash[pageArray[pos + j].num] = -1;
 						pageArray[pos + j].num = (SRC[i] + temp) % PAGEDIFFN;
 						pageArray[pos + j].time = 0;
+						HitHash[(SRC[i] + temp) % PAGEDIFFN] = pos + j;
 						j++;
 					}
 				}
@@ -260,8 +289,10 @@ int LRU_extention(int n, int sliceSize) {
 			}
 			//内存未满还在初始化的时候依旧是一个一个装入的
 			else {
-				pageArray[Check(n, pageArray)].num = SRC[i];//内存未满,向内添加
-				pageArray[Check(n, pageArray)].time = 0;
+				HitHash[pageArray[checkPos].num] = -1;
+				pageArray[checkPos].num = SRC[i];//内存未满,向内添加
+				pageArray[checkPos].time = 0;
+				HitHash[SRC[i]] = checkPos;
 			}
 			breakNum++;//该页不在内存中缺页数量+1
 		}
@@ -275,6 +306,106 @@ int LRU_extention(int n, int sliceSize) {
 	return breakNum; 
 
 }
+
+//得到在内存中访问次数最少的页面
+int GetMin(int n, PPage array) {
+	int i;
+	int min = 100000;
+	int pos = 0;
+	for (i = 0; i < n; i++) {
+		if (array[i].time < min) {
+			min = array[i].time;
+			pos = i;
+		}
+	}
+	return pos;
+}
+
+//LFU算法的缺页数量，传入参数为页框数
+int LFU(int n) {
+	int i;//循环变量
+	int j;//循环变量
+	int breakNum = 0;
+	int pos = 0;//需要替换的下标值
+	PPage pageArray;
+	pageArray = (PPage)malloc(n*sizeof(Page));
+	for (i = 0; i < n; i++) {
+		pageArray[i].num = -1;
+		pageArray[i].time = 0;
+	}
+	for (i = 0; i < PAGENUM; i++) {
+		if (Equation(SRC[i], n, pageArray) == -1) {//如果当前页号不在内存中
+			int checkPos = Check(n, pageArray);
+			if (checkPos == -1) {//当前物理内存已满，进行替换操作
+				pos = GetMin(n, pageArray);
+				HitHash[pageArray[pos].num] = -1;
+				pageArray[pos].num = SRC[i];
+				pageArray[pos].time = 1;
+				HitHash[SRC[i]] = pos;
+			}
+			else {
+				HitHash[pageArray[checkPos].num] = -1;
+				pageArray[checkPos].num = SRC[i];//内存未满,向内添加
+				pageArray[checkPos].time = 1;
+				HitHash[SRC[i]] = checkPos;
+
+			}
+			breakNum++;//该页不在内存中缺页数量+1
+		}
+		else {
+			pageArray[Equation(SRC[i], n, pageArray)].time++;
+		}
+	}
+	return breakNum;
+}
+
+
+//LFU算法的缺页数量，传入参数为页框数
+int LFU_extention(int n, int sliceSize) {
+	int i;//循环变量
+	int j;//循环变量
+	int breakNum = 0;
+	int pos = 0;//需要替换的下标值
+	PPage pageArray;
+	pageArray = (PPage)malloc(n*sizeof(Page));
+	for (i = 0; i < n; i++) {
+		pageArray[i].num = -1;
+		pageArray[i].time = 0;
+	}
+	for (i = 0; i < PAGENUM; i++) {
+		if (Equation(SRC[i], n, pageArray) == -1) {//如果当前页号不在内存中
+			int checkPos = Check(n, pageArray);
+			if (checkPos == -1) {//当前物理内存已满，进行替换操作
+								 //pos = GetMax_extention(n, pageArray, sliceSize);
+				pos = GetMin(n, pageArray);
+				int temp = 0;
+				for (j = 0; temp < sliceSize && pos + j < n; temp++) {
+					if (j == 0 || Equation((SRC[i] + temp) % PAGEDIFFN, n, pageArray) == -1) {
+						HitHash[pageArray[pos + j].num] = -1;
+						pageArray[pos + j].num = (SRC[i] + temp) % PAGEDIFFN;
+						pageArray[pos + j].time = 1;
+						HitHash[(SRC[i] + temp) % PAGEDIFFN] = pos + j;
+						j++;
+					}
+				}
+			}
+			//内存未满还在初始化的时候依旧是一个一个装入的
+			else {
+				HitHash[pageArray[checkPos].num] = -1;
+				pageArray[checkPos].num = SRC[i];//内存未满,向内添加
+				pageArray[checkPos].time = 1;
+				HitHash[SRC[i]] = checkPos;
+			}
+			breakNum++;//该页不在内存中缺页数量+1
+		}
+		else {
+			pageArray[Equation(SRC[i], n, pageArray)].time++;
+		}
+	}
+	return breakNum;
+}
+
+
 
 //Clock算法,此时time为标志位,只有0和1两个值
 int Clock(int n) {
@@ -293,8 +424,10 @@ int Clock(int n) {
 			breakNum++;
 			while (1) {
 				if (pageArray[j % n].time == 0) {
+					HitHash[pageArray[j % n].num] = -1;
 					pageArray[j % n].num = SRC[i];
 					pageArray[j % n].time = 1;
+					HitHash[SRC[i]] = j%n;
 					j++;
 					break;
 				}
@@ -315,7 +448,68 @@ int Clock(int n) {
 
 }
 
+//Clock算法,此时time为标志位,只有0和1两个值
+int Clock_extention(int n, int sliceSize) {
+	int i;//循环变量
+	int j = 0;//j%n为队列指针,此处将数组做队列使用
+	int breakNum = 0;
+	int pos = 0;//需要替换的下标值
+	PPage pageArray;
+	pageArray = (PPage)malloc(n*sizeof(Page));
+	for (i = 0; i < n; i++) {
+		pageArray[i].num = -1;
+		pageArray[i].time = 0;
+	}
+	for (i = 0; i < PAGENUM; i++) {
+		if (Equation(SRC[i], n, pageArray) == -1) {//如果当前页号不在内存中
+			breakNum++;
+			int temp = 0;
+			int k;
+			for (k = 0; temp < sliceSize && pos + k < n; temp++) {
+				if (k == 0 || Equation((SRC[i] + temp) % PAGEDIFFN, n, pageArray) == -1) {
+					if (k == 0) {
+						while (1) {
+							if (pageArray[j % n].time == 0) {
+								HitHash[pageArray[j % n].num] = -1;
+								pageArray[j % n].num = SRC[i];
+								pageArray[j % n].time = 1;
+								HitHash[SRC[i]] = j%n;
+								j++;
+								break;
+							}
+							else {
+								pageArray[j % n].time = 0;
+								j++;
+								continue;
+							}
+						}
+					}
+					else {
+						HitHash[pageArray[j%n].num] = -1;
+						pageArray[j % n].num = (SRC[i] + temp) % PAGEDIFFN;
+						pageArray[j % n].time = 1;
+						HitHash[(SRC[i] + temp) % PAGEDIFFN] = j % n;
+						j++;
+					}
+					k++;
+				}
+			}
+		}
+		else {//当前页号在内存中
+			pageArray[Equation(SRC[i], n, pageArray)].time = 1;//当前标志位置为1
+			j = Equation(SRC[i], n, pageArray) + 1;
+		}
+
+	}
+	return breakNum;
+
+}
+
 int main() {
+	float notHitLRU, notHitLRUE, notHitClock, notHit;
+	DWORD  dwStart, dwEnd;
+	FILE *fp;
+	fp = fopen("result.txt","w");
 	init_SRC();
 	
 	/*
@@ -331,9 +525,50 @@ int main() {
 		//printf("LRU算法:当页框数为 %d 时缺页数量为: %d\n", i, LRU(i));
 		//printf("Clock算法:当页框数为 %d 时缺页数量为 : %d\n", i, Clock(i));
 	}*/
-	for (int i = 2; i < 20; i++) {
-		printf("LRU算法:当页框数为 %d 时缺页率为: %f%%\n", BUFFERNUM, ((float)LRU(BUFFERNUM) * 100) / PAGENUM);
-		printf("LRU_extention算法:当页框数为 %d 时缺页率为: %f%%\n", BUFFERNUM, ((float)LRU_extention(BUFFERNUM, i) * 100) / PAGENUM);
+	
+	for (int i = 2; i < 20; i += 1) {
+		init_HitHash();
+		dwStart = GetTickCount();
+		notHitLRU = ((float)LRU(BUFFERNUM) * 100) / PAGENUM;
+		dwEnd = GetTickCount();
+		printf("LRU算法:当页框数为 %d , 片大小为 %d 时缺页率为: %f%%, 运行时间为%u\n", BUFFERNUM, i, notHitLRU, (dwEnd - dwStart));
+		fprintf(fp, "%f  %u\n", notHitLRU, (dwEnd - dwStart));
+		
+		init_HitHash();
+		dwStart = GetTickCount();
+		notHitLRUE = ((float)LRU_extention(BUFFERNUM, i) * 100) / PAGENUM;
+		dwEnd = GetTickCount();
+		printf("LRU_extention算法:当页框数为 %d , 片大小为 %d 时缺页率为: %f%%, 运行时间为%u\n\n", BUFFERNUM, i, notHitLRUE, (dwEnd-dwStart));
+		fprintf(fp, "%f  %u\n", notHitLRUE, (dwEnd - dwStart));
+		
+		init_HitHash();
+		dwStart = GetTickCount();
+		notHit = ((float)LFU(BUFFERNUM) * 100) / PAGENUM;
+		dwEnd = GetTickCount();
+		printf("LFU算法:当页框数为 %d ,片大小为 %d 时缺页率为: %f%%, 运行时间为%u\n", BUFFERNUM, i, notHit, (dwEnd - dwStart));
+		fprintf(fp, "%f  %u\n", notHit, (dwEnd - dwStart));
+
+		init_HitHash();
+		dwStart = GetTickCount();
+		notHit = ((float)LFU_extention(BUFFERNUM, i) * 100) / PAGENUM;
+		dwEnd = GetTickCount();
+		printf("LFU_extention算法:当页框数为 %d , 片大小为 %d 时缺页率为: %f%%, 运行时间为%u\n\n", BUFFERNUM, i, notHit, (dwEnd - dwStart));
+		fprintf(fp, "%f  %u\n", notHit, (dwEnd - dwStart));
+
+		init_HitHash();
+		dwStart = GetTickCount();
+		notHitClock = ((float)Clock(BUFFERNUM) * 100) / PAGENUM;
+		dwEnd = GetTickCount();
+		printf("Clock算法:当页框数为 %d , 片大小为 %d 时缺页率为: %f%%, 运行时间为%u\n", BUFFERNUM, i, notHitClock, (dwEnd - dwStart));
+		fprintf(fp, "%f  %u\n", notHitClock, (dwEnd - dwStart));
+
+		init_HitHash();
+		dwStart = GetTickCount();
+		notHit = ((float)Clock_extention(BUFFERNUM, i) * 100) / PAGENUM;
+		dwEnd = GetTickCount();
+		printf("Clock_extention算法:当页框数为 %d , 片大小为 %d 时缺页率为: %f%%, 运行时间为%u\n\n", BUFFERNUM, i, notHit, (dwEnd - dwStart));
+		fprintf(fp, "%f  %u\n\n", notHit, (dwEnd - dwStart));
+
 	}
 	return 0;
 }
