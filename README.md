@@ -1,2 +1,2 @@
 # C_Study
-my learning process of C
+my learning code of C
