@@ -1,0 +1,23 @@
+const int a1 = -9, b1 = 0, b2 = 10;
+const char c1 = 89, e = 'e';
+const d = 11;
+const int b3 == 111;
+const int a2 = +0123;
+const char c2 = 'c';
+
+int v_a, v_b, v_c[10], d;
+char v_f;
+char v_e = 'e';
+int v_g[0], v_h;
+int v_i[0, v_j;
+int v_f, v_t;
+
+void main(){
+	int result;
+	result = vv + 1;
+	a1 = 6;
+	v_c[11] = 0;
+	v_c['a'] = 14;
+	v_b = v_c[10];
+	return;
+}

@@ -1,0 +1,103 @@
+测试一:
+输入:5
+输出:
+Welcome to the fibo game! @ Please enter the num(if the num >=10, we only print 9 numbers) you want to get:  
+5
+1
+1
+2
+3
+5
+global_repeat must be 7:  7
+exp_must be 390:  390
+exp_must be -19:  -19
+exp_must be 95:  95
+exp_must be -5:  -5
+exp_must be 9:  9
+exp_must be 4:  4
+call_must be 8:  8
+call_must be 6:  6
+if_test passed  
+gcd_ must be 12:  12
+The game is end. But please remember the author:  
+56
+If you Got it, I'm glad for you. But if you GG, please leave me a life  
+
+测试二:
+输入: 10
+输出: 
+Welcome to the fibo game! @ Please enter the num(if the num >=10, we only print 9 numbers) you want to get:  
+10
+There are some error:  g
+The number = 10  
+The fibo position of that is:  10
+1
+1
+2
+3
+5
+8
+13
+21
+34
+global_repeat must be 7:  7
+exp_must be 390:  390
+exp_must be -19:  -19
+exp_must be 95:  95
+exp_must be -5:  -5
+exp_must be 9:  9
+exp_must be 4:  4
+call_must be 8:  8
+call_must be 6:  6
+if_test passed  
+gcd_ must be 12:  12
+The game is end. But please remember the author:  
+56
+If you Got it, I'm glad for you. But if you GG, please leave me a life   
+	
+测试三:
+输入: 15
+输出:
+Welcome to the fibo game! @ Please enter the num(if the num >=10, we only print 9 numbers) you want to get:  
+15
+There are some error:  g
+The number = 10  
+The fibo position of that is:  10
+There are some error:  b
+The number > 10  
+The fibo position of that is:  11
+There are some error:  b
+The number > 10  
+The fibo position of that is:  12
+There are some error:  b
+The number > 10  
+The fibo position of that is:  13
+There are some error:  b
+The number > 10  
+The fibo position of that is:  14
+There are some error:  b
+The number > 10  
+The fibo position of that is:  15
+1
+1
+2
+3
+5
+8
+13
+21
+34
+global_repeat must be 7:  7
+exp_must be 390:  390
+exp_must be -19:  -19
+exp_must be 95:  95
+exp_must be -5:  -5
+exp_must be 9:  9
+exp_must be 4:  4
+call_must be 8:  8
+call_must be 6:  6
+if_test passed  
+gcd_ must be 12:  12
+The game is end. But please remember the author:  
+56
+If you Got it, I'm glad for you. But if you GG, please leave me a life  

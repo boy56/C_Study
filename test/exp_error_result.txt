@@ -1,0 +1,5 @@
+Error: 不能对char赋值int类型   line: 10
+Error: 除数不能为0   line: 11
+Error: 表达式格式错误   line: 12
+Error: 表达式格式错误   line: 13
+Error: 表达式格式错误   line: 14

@@ -1,0 +1,744 @@
+RET: func_return_value
+
+
+    func  notyp, const_define
+
+const_define_begin_: 
+    out  1
+    out  47
+    ret   
+
+    func  notyp, const_define_test
+
+const_define_test_begin_: 
+    call  const_define
+    jal  const_define_begin_
+
+call_9_: 
+    ret   
+
+    func  notyp, var_define
+
+var_define_begin_: 
+    ret   
+
+    func  notyp, var_define_test
+
+var_define_test_begin_: 
+    call  var_define
+    jal  var_define_begin_
+
+call_18_: 
+    ret   
+
+    func  notyp, define
+
+define_begin_: 
+    ret   
+
+    func  notyp, define_test
+
+define_test_begin_: 
+    call  var_define_test
+    jal  var_define_test_begin_
+
+call_27_: 
+    call  const_define_test
+    jal  const_define_test_begin_
+
+call_30_: 
+    call  define
+    jal  define_begin_
+
+call_33_: 
+    out  define test passed,  
+    ret   
+
+    func  notyp, operator
+
+operator_begin_: 
+    a = 1
+    T0 = 1 + 2
+    b = T0
+    T1 = 3 * 1
+    c = T1
+    T2 = 0 - 4
+    d = T2
+    e = 5
+    f = 6
+    T3 = b * 3
+    T4 = T3 + c
+    T5 = d / 4
+    T6 = T4 - T5
+    T7 = a / a
+    T8 = T6 + T7
+    a = T8
+    T9 = 0 + a
+    T10 = a * 3
+    T11 = T9 + T10
+    T12 = T11 + c
+    T13 = d / 4
+    T14 = T12 - T13
+    T15 = e * f
+    T16 = T14 + T15
+    b = T16
+    T17 = 0 - a
+    T18 = b * 0
+    T19 = T17 + T18
+    T20 = 1 - 0
+    T21 = T19 - T20
+    e = T21
+    ret   
+
+    func  notyp, operator_test
+
+operator_test_begin_: 
+    call  operator
+    jal  operator_begin_
+
+call_74_: 
+    out  operator test passed,  
+    ret   
+
+    func  notyp, string
+
+string_begin_: 
+    out  ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz,  
+    out  !#$%&'()*+,-./:;<=>?@[]^_`{|}~,  
+    ret   
+
+    func  notyp, string_test
+
+string_test_begin_: 
+    call  string
+    jal  string_begin_
+
+call_86_: 
+    ret   
+
+    func  notyp, dowhile
+
+dowhile_begin_: 
+    i = 100
+
+_91_label_: 
+    blt  i, 50, _95_label_
+    T22 = i / 2
+    i = T22
+
+_95_label_: 
+    bge  i, 50, _100_label_
+    T23 = i + 10
+    T24 = T23 / 10
+    i = T24
+
+_100_label_: 
+    bge  i, 10, _91_label_
+
+_102_label_: 
+    T25 = i - 1
+    i = T25
+    out  dowhile test passed,  
+    bgt  0, 0, _102_label_
+    ret   
+
+    func  notyp, dowhile_test
+
+dowhile_test_begin_: 
+    call  dowhile
+    jal  dowhile_begin_
+
+call_112_: 
+    ret   
+
+    func  notyp, ifcondition
+
+ifcondition_begin_: 
+    a = 1
+    rightnumber = 0
+    bne  a, 1, _121_label_
+    T26 = rightnumber + 1
+    rightnumber = T26
+
+_121_label_: 
+    a = 2
+    ble  a, 1, _126_label_
+    T27 = rightnumber + 1
+    rightnumber = T27
+
+_126_label_: 
+    a = 0
+    bge  a, 1, _131_label_
+    T28 = rightnumber + 1
+    rightnumber = T28
+
+_131_label_: 
+    beq  a, 1, _135_label_
+    T29 = rightnumber + 1
+    rightnumber = T29
+
+_135_label_: 
+    blt  a, 0, _139_label_
+    T30 = rightnumber + 1
+    rightnumber = T30
+
+_139_label_: 
+    bgt  a, 0, _143_label_
+    T31 = rightnumber + 1
+    rightnumber = T31
+
+_143_label_: 
+    T32 = 1 + 1
+    T33 = T32 + 1
+    T34 = 1 * 3
+    T35 = T33 + T34
+    beq  rightnumber, T35, _150_label_
+    out  ifcondition clause error!,  
+
+_150_label_: 
+    beq  rightnumber, rightnumber, _153_label_
+    out  ifcondition clause error,  
+
+_153_label_: 
+    ret   
+
+    func  ints, switchcodintionans
+    para  ints, x
+
+switchcodintionans_begin_: 
+    bne  x, 1, _161_label_
+    ret  2
+    goto  switch_158_end_
+
+_161_label_: 
+    bne  x, 2, _165_label_
+    ret  3
+    goto  switch_158_end_
+
+_165_label_: 
+    bne  x, 3, _169_label_
+    ret  4
+    goto  switch_158_end_
+
+_169_label_: 
+
+switch_158_end_: 
+    ret  5
+
+    func  ints, switchcodintion
+
+switchcodintion_begin_: 
+    i = 1
+    rightnumber = 0
+
+_176_label_: 
+    T36 = i + 1
+    call  switchcodintionans
+    passpara  i
+    jal  switchcodintionans_begin_
+
+call_181_: 
+    T37 = RET
+    bne  T36, T37, _186_label_
+    T38 = rightnumber + 1
+    rightnumber = T38
+
+_186_label_: 
+    T39 = i + 1
+    i = T39
+    blt  i, 5, _176_label_
+    beq  rightnumber, 4, _192_label_
+    out  switchcodintion clause  error!,  
+
+_192_label_: 
+    ble  rightnumber, 0, _195_label_
+    ret  i
+
+_195_label_: 
+    out  switchcodintion clause  error!,  
+    ret   
+
+    func  notyp, condition
+
+condition_begin_: 
+    iter = 0
+
+_201_label_: 
+    bne  iter, 0, _207_label_
+    beq  iter, 0, _205_label_
+    out  error 0,  
+
+_205_label_: 
+    goto  switch_202_end_
+
+_207_label_: 
+    bne  iter, 1, _213_label_
+    beq  iter, 1, _211_label_
+    out  error 1,  
+
+_211_label_: 
+    goto  switch_202_end_
+
+_213_label_: 
+    bne  iter, 2, _219_label_
+    beq  iter, 2, _217_label_
+    out  error 2,  
+
+_217_label_: 
+    goto  switch_202_end_
+
+_219_label_: 
+
+switch_202_end_: 
+    T40 = iter + 1
+    iter = T40
+    blt  iter, 5, _201_label_
+    ret   
+
+    func  notyp, condition_test
+
+condition_test_begin_: 
+    call  ifcondition
+    jal  ifcondition_begin_
+
+call_229_: 
+    call  switchcodintion
+    jal  switchcodintion_begin_
+
+call_232_: 
+    T41 = RET
+    call  condition
+    jal  condition_begin_
+
+call_236_: 
+    out  condition test passed,  
+    ret   
+
+    func  notyp, miscellaneous
+
+miscellaneous_begin_: 
+    _ = 1
+    a = 2
+
+_243_label_: 
+    array[i] = i
+    T42 = i + 1
+    i = T42
+    blt  i, 23, _243_label_
+    ch1 = 97
+    i = 127
+    endid = i
+    _ = 0
+
+_252_label_: 
+    T43 = _ * 1
+    T44 = T43 - _
+    T45 = T44 - 1
+    T46 = 2 / 1
+    T47 = T45 + T46
+    T48 = T47 - 1
+    T49 = T48 / 2
+    buf[T49] = 97
+    T50 = _ + 1
+    _ = T50
+    blt  _, endid, _252_label_
+    T51 = buf[0]
+    bne  T51, 97, _267_label_
+    out  miscellaneous test passed,  
+
+_267_label_: 
+    ret   
+
+    func  notyp, miscellaneous_test
+
+miscellaneous_test_begin_: 
+    call  miscellaneous
+    jal  miscellaneous_begin_
+
+call_273_: 
+    ret   
+
+    func  ints, fibonaci
+    para  ints, n
+
+fibonaci_begin_: 
+    bne  n, 0, _281_label_
+    ret  0
+    goto  switch_278_end_
+
+_281_label_: 
+    bne  n, 1, _285_label_
+    ret  1
+    goto  switch_278_end_
+
+_285_label_: 
+    bne  n, 2, _289_label_
+    ret  1
+    goto  switch_278_end_
+
+_289_label_: 
+
+switch_278_end_: 
+    call  fibonaci
+    T52 = n - 1
+    passpara  T52
+    jal  fibonaci_begin_
+
+call_295_: 
+    T53 = RET
+    call  fibonaci
+    T54 = n - 2
+    passpara  T54
+    jal  fibonaci_begin_
+
+call_301_: 
+    T55 = RET
+    T56 = T53 + T55
+    ret  T56
+
+    func  notyp, fibonaci_test
+
+fibonaci_test_begin_: 
+    out  Fibonaci: Please input a unsigned positive integer ?,  
+    in  n
+
+_309_label_: 
+    bge  n, 0, _313_label_
+    out  Input error, try again:,  
+    in  n
+
+_313_label_: 
+    blt  n, 0, _321_label_
+    call  fibonaci
+    passpara  n
+    jal  fibonaci_begin_
+
+call_318_: 
+    T57 = RET
+    out  The fibonaci's answer is , T57
+
+_321_label_: 
+    blt  n, 0, _309_label_
+    ret   
+
+    func  ints, mod
+    para  ints, n
+    para  ints, m
+
+mod_begin_: 
+    T58 = n / m
+    T59 = T58 * m
+    T60 = n - T59
+    ret  T60
+
+    func  ints, gcd
+    para  ints, n
+    para  ints, m
+
+gcd_begin_: 
+    rem = 0
+    bne  n, 0, _339_label_
+    ret  m
+
+_339_label_: 
+    bne  m, 0, _342_label_
+    ret  n
+
+_342_label_: 
+    call  gcd
+    passpara  m
+    call  mod
+    passpara  n
+    passpara  m
+    jal  mod_begin_
+
+call_349_: 
+    T61 = RET
+    passpara  T61
+    jal  gcd_begin_
+
+call_353_: 
+    T62 = RET
+    ret  T62
+
+    func  ints, iswronggcd
+    para  ints, n
+    para  ints, m
+
+iswronggcd_begin_: 
+    bgt  n, 0, _362_label_
+    ret  1
+
+_362_label_: 
+    bgt  m, 0, _365_label_
+    ret  1
+
+_365_label_: 
+    ret  0
+
+    func  notyp, gcd_test
+
+gcd_test_begin_: 
+    out  GCD: Please input two unsigned positive integer ?,  
+    in  n
+    in  m
+    call  iswronggcd
+    passpara  n
+    passpara  m
+    jal  iswronggcd_begin_
+
+call_376_: 
+    T63 = RET
+    ble  T63, 0, _390_label_
+
+_379_label_: 
+    out  Input error, try Again: ,  
+    in  n
+    in  m
+    call  iswronggcd
+    passpara  n
+    passpara  m
+    jal  iswronggcd_begin_
+
+call_387_: 
+    T64 = RET
+    bgt  T64, 0, _379_label_
+
+_390_label_: 
+    call  gcd
+    passpara  n
+    passpara  m
+    jal  gcd_begin_
+
+call_395_: 
+    T65 = RET
+    out  The gcd's answer is , T65
+    ret   
+
+    func  ints, is_prime
+    para  ints, x
+
+is_prime_begin_: 
+    i = 2
+    bne  x, 2, _405_label_
+    ret  1
+
+_405_label_: 
+
+_406_label_: 
+    call  mod
+    passpara  x
+    passpara  i
+    jal  mod_begin_
+
+call_411_: 
+    T66 = RET
+    bne  T66, 0, _415_label_
+    ret  0
+
+_415_label_: 
+    T67 = i + 1
+    i = T67
+    T68 = i * i
+    blt  T68, x, _406_label_
+    ret  1
+
+    func  notyp, prime_factorization
+    para  ints, n
+
+prime_factorization_begin_: 
+    i = 2
+    first = 0
+    bne  n, 1, _429_label_
+    out  1,  
+    ret   
+
+_429_label_: 
+
+_430_label_: 
+    call  is_prime
+    passpara  i
+    jal  is_prime_begin_
+
+call_434_: 
+    T69 = RET
+    bne  T69, 1, _460_label_
+    call  mod
+    passpara  n
+    passpara  i
+    jal  mod_begin_
+
+call_441_: 
+    T70 = RET
+    bne  T70, 0, _459_label_
+
+_444_label_: 
+    T71 = n / i
+    n = T71
+    bne  first, 1, _449_label_
+    out  *,  
+
+_449_label_: 
+    first = 1
+    out  i
+    call  mod
+    passpara  n
+    passpara  i
+    jal  mod_begin_
+
+call_456_: 
+    T72 = RET
+    beq  T72, 0, _444_label_
+
+_459_label_: 
+
+_460_label_: 
+    T73 = i + 1
+    i = T73
+    T74 = i * i
+    blt  T74, n, _430_label_
+    beq  n, 1, _470_label_
+    bne  first, 1, _468_label_
+    out  *,  
+
+_468_label_: 
+    out  n
+
+_470_label_: 
+    ret   
+
+    func  notyp, prime_factorization_test
+
+prime_factorization_test_begin_: 
+    out  prime_factorization: Please input a unsigned positive integer(<2^31-1) ?,  
+    in  n
+
+_476_label_: 
+    bge  n, 0, _480_label_
+    out  Input error, try again:,  
+    in  n
+
+_480_label_: 
+    blt  n, 0, _476_label_
+    out  The factor of n is ,  
+    call  prime_factorization
+    passpara  n
+    jal  prime_factorization_begin_
+
+call_486_: 
+    ret   
+
+    func  ints, iswrong
+    para  chars, a
+
+iswrong_begin_: 
+    bne  69, a, _493_label_
+    ret  0
+
+_493_label_: 
+    bne  77, a, _496_label_
+    ret  0
+
+_496_label_: 
+    bne  72, a, _499_label_
+    ret  0
+
+_499_label_: 
+    ret  1
+
+    func  notyp, main
+
+main: 
+    out  Please input Test Type:E(Easy), (M)Middle, H(Hard): ,  
+    in  kind
+    call  iswrong
+    passpara  kind
+    jal  iswrong_begin_
+
+call_508_: 
+    T75 = RET
+    ble  T75, 0, _520_label_
+
+_511_label_: 
+    out  Try Again: ,  
+    in  kind
+    call  iswrong
+    passpara  kind
+    jal  iswrong_begin_
+
+call_517_: 
+    T76 = RET
+    bgt  T76, 0, _511_label_
+
+_520_label_: 
+    bne  kind, 69, _532_label_
+    call  define_test
+    jal  define_test_begin_
+
+call_524_: 
+    call  operator_test
+    jal  operator_test_begin_
+
+call_527_: 
+    call  fibonaci_test
+    jal  fibonaci_test_begin_
+
+call_530_: 
+    goto  switch_521_end_
+
+_532_label_: 
+    bne  kind, 77, _547_label_
+    call  dowhile_test
+    jal  dowhile_test_begin_
+
+call_536_: 
+    call  condition_test
+    jal  condition_test_begin_
+
+call_539_: 
+    call  string_test
+    jal  string_test_begin_
+
+call_542_: 
+    call  gcd_test
+    jal  gcd_test_begin_
+
+call_545_: 
+    goto  switch_521_end_
+
+_547_label_: 
+    bne  kind, 72, _571_label_
+    call  define_test
+    jal  define_test_begin_
+
+call_551_: 
+    call  operator_test
+    jal  operator_test_begin_
+
+call_554_: 
+    call  dowhile_test
+    jal  dowhile_test_begin_
+
+call_557_: 
+    call  condition_test
+    jal  condition_test_begin_
+
+call_560_: 
+    call  string_test
+    jal  string_test_begin_
+
+call_563_: 
+    call  miscellaneous_test
+    jal  miscellaneous_test_begin_
+
+call_566_: 
+    call  prime_factorization_test
+    jal  prime_factorization_test_begin_
+
+call_569_: 
+    goto  switch_521_end_
+
+_571_label_: 
+
+switch_521_end_: 
+    ret   

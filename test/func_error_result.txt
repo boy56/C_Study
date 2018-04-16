@@ -1,0 +1,6 @@
+Error: 函数返回值错误(返回类型错误或者无返回值)   line: 11
+Error: 函数返回值错误(返回类型错误或者无返回值)   line: 19
+Warning: 形参与实参类型不符   line: 31
+Error: 形参个数与实参个数不符   line: 32
+Error: 应该为有返回值函数调用   line: 33
+Error: 不能对char赋值int类型   line: 34

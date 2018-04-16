@@ -1,0 +1,25 @@
+c must be 6:  6
+d must be 12:  12
+e must be 18:  18
+complete number:   6
+    1
+    2
+    3
+    
+complete number:   28
+    1
+    2
+    4
+    7
+    14
+    
+complete number:   496
+    1
+    2
+    4
+    8
+    16
+    31
+    62
+    124
+    248

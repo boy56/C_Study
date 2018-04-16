@@ -1,0 +1,36 @@
+int func1(char x){
+	return (1);
+}
+
+int func2(int x, int y){
+	return (x+y);
+}
+
+int func3(){
+
+}
+
+void func4(){
+	return;
+}
+
+int func5(){
+	return ('a');
+}
+
+
+void main(){
+	int func1_para;
+	int func2_para;
+	int func1_result, func2_result, func4_result;
+	char func5_result;
+
+	func1_para = 4;
+	func2_para = 10;
+
+	func1_result = func1(func1_para);
+	func2_result = func2(10);
+	func4_result = func4();
+	func5_result = func5();
+	return;
+}

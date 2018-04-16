@@ -1,0 +1,574 @@
+func	  notyp const_define	0
+setlab	    const_define_begin_	4
+out	    1	0
+out	char   47	0
+ret	     	0
+func	  notyp const_define_test	0
+setlab	    const_define_test_begin_	4
+call	    const_define	0
+jal	const_define_begin_    	0
+setlab	    call_9_	3
+ret	     	0
+func	  notyp var_define	0
+setlab	    var_define_begin_	4
+ret	     	0
+func	  notyp var_define_test	0
+setlab	    var_define_test_begin_	4
+call	    var_define	0
+jal	var_define_begin_    	0
+setlab	    call_18_	3
+ret	     	0
+func	  notyp define	0
+setlab	    define_begin_	4
+ret	     	0
+func	  notyp define_test	0
+setlab	    define_test_begin_	4
+call	    var_define_test	0
+jal	var_define_test_begin_    	0
+setlab	    call_27_	3
+call	    const_define_test	0
+jal	const_define_test_begin_    	0
+setlab	    call_30_	3
+call	    define	0
+jal	define_begin_    	0
+setlab	    call_33_	3
+out	  define test passed  	0
+ret	     	0
+func	  notyp operator	0
+setlab	    operator_begin_	4
+=	a   1	0
++	T0 1 2	0
+=	b   T0	0
+*	T1 3 1	0
+=	c   T1	0
+-	T2 0 4	0
+=	d   T2	0
+=	e   5	0
+=	f   6	0
+*	T3 b 3	0
++	T4 T3 c	0
+/	T5 d 4	0
+-	T6 T4 T5	0
+/	T7 a a	0
++	T8 T6 T7	0
+=	a   T8	0
++	T9 0 a	0
+*	T10 a 3	0
++	T11 T9 T10	0
++	T12 T11 c	0
+/	T13 d 4	0
+-	T14 T12 T13	0
+*	T15 e f	0
++	T16 T14 T15	0
+=	b   T16	0
+-	T17 0 a	0
+*	T18 b 0	0
++	T19 T17 T18	0
+-	T20 1 0	0
+-	T21 T19 T20	0
+=	e   T21	0
+ret	     	0
+func	  notyp operator_test	0
+setlab	    operator_test_begin_	4
+call	    operator	0
+jal	operator_begin_    	0
+setlab	    call_74_	3
+out	  operator test passed  	0
+ret	     	0
+func	  notyp string	0
+setlab	    string_begin_	4
+out	  ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz  	0
+out	  !#$%&'()*+,-./:;<=>?@[]^_`{|}~  	0
+ret	     	0
+func	  notyp string_test	0
+setlab	    string_test_begin_	4
+call	    string	0
+jal	string_begin_    	0
+setlab	    call_86_	3
+ret	     	0
+func	  notyp dowhile	0
+setlab	    dowhile_begin_	4
+=	i   100	0
+setlab	    _91_label_	1
+blt	_95_label_ i 50	0
+/	T22 i 2	0
+=	i   T22	0
+setlab	    _95_label_	1
+bge	_100_label_ i 50	0
++	T23 i 10	0
+/	T24 T23 10	0
+=	i   T24	0
+setlab	    _100_label_	1
+bge	_91_label_ i 10	0
+setlab	    _102_label_	1
+-	T25 i 1	0
+=	i   T25	0
+out	  dowhile test passed  	0
+bgt	_102_label_ 0 0	0
+ret	     	0
+func	  notyp dowhile_test	0
+setlab	    dowhile_test_begin_	4
+call	    dowhile	0
+jal	dowhile_begin_    	0
+setlab	    call_112_	3
+ret	     	0
+func	  notyp ifcondition	0
+setlab	    ifcondition_begin_	4
+=	a   1	0
+=	rightnumber   0	0
+bne	_121_label_ a 1	0
++	T26 rightnumber 1	0
+=	rightnumber   T26	0
+setlab	    _121_label_	1
+=	a   2	0
+ble	_126_label_ a 1	0
++	T27 rightnumber 1	0
+=	rightnumber   T27	0
+setlab	    _126_label_	1
+=	a   0	0
+bge	_131_label_ a 1	0
++	T28 rightnumber 1	0
+=	rightnumber   T28	0
+setlab	    _131_label_	1
+beq	_135_label_ a 1	0
++	T29 rightnumber 1	0
+=	rightnumber   T29	0
+setlab	    _135_label_	1
+blt	_139_label_ a 0	0
++	T30 rightnumber 1	0
+=	rightnumber   T30	0
+setlab	    _139_label_	1
+bgt	_143_label_ a 0	0
++	T31 rightnumber 1	0
+=	rightnumber   T31	0
+setlab	    _143_label_	1
++	T32 1 1	0
++	T33 T32 1	0
+*	T34 1 3	0
++	T35 T33 T34	0
+beq	_150_label_ rightnumber T35	0
+out	  ifcondition clause error!  	0
+setlab	    _150_label_	1
+beq	_153_label_ rightnumber rightnumber	0
+out	  ifcondition clause error  	0
+setlab	    _153_label_	1
+ret	     	0
+func	  ints switchcodintionans	0
+para	  ints x	0
+setlab	    switchcodintionans_begin_	4
+bne	_161_label_ x 1	0
+ret	    2	0
+goto	switch_158_end_    	0
+setlab	    _161_label_	1
+bne	_165_label_ x 2	0
+ret	    3	0
+goto	switch_158_end_    	0
+setlab	    _165_label_	1
+bne	_169_label_ x 3	0
+ret	    4	0
+goto	switch_158_end_    	0
+setlab	    _169_label_	1
+setlab	    switch_158_end_	1
+ret	    5	0
+func	  ints switchcodintion	0
+setlab	    switchcodintion_begin_	4
+=	i   1	0
+=	rightnumber   0	0
+setlab	    _176_label_	1
++	T36 i 1	0
+call	    switchcodintionans	0
+passpara	    i	0
+jal	switchcodintionans_begin_    	0
+setlab	    call_181_	3
+=	T37   RET	0
+bne	_186_label_ T36 T37	0
++	T38 rightnumber 1	0
+=	rightnumber   T38	0
+setlab	    _186_label_	1
++	T39 i 1	0
+=	i   T39	0
+blt	_176_label_ i 5	0
+beq	_192_label_ rightnumber 4	0
+out	  switchcodintion clause  error!  	0
+setlab	    _192_label_	1
+ble	_195_label_ rightnumber 0	0
+ret	    i	0
+setlab	    _195_label_	1
+out	  switchcodintion clause  error!  	0
+ret	     	0
+func	  notyp condition	0
+setlab	    condition_begin_	4
+=	iter   0	0
+setlab	    _201_label_	1
+bne	_207_label_ iter 0	0
+beq	_205_label_ iter 0	0
+out	  error 0  	0
+setlab	    _205_label_	1
+goto	switch_202_end_    	0
+setlab	    _207_label_	1
+bne	_213_label_ iter 1	0
+beq	_211_label_ iter 1	0
+out	  error 1  	0
+setlab	    _211_label_	1
+goto	switch_202_end_    	0
+setlab	    _213_label_	1
+bne	_219_label_ iter 2	0
+beq	_217_label_ iter 2	0
+out	  error 2  	0
+setlab	    _217_label_	1
+goto	switch_202_end_    	0
+setlab	    _219_label_	1
+setlab	    switch_202_end_	1
++	T40 iter 1	0
+=	iter   T40	0
+blt	_201_label_ iter 5	0
+ret	     	0
+func	  notyp condition_test	0
+setlab	    condition_test_begin_	4
+call	    ifcondition	0
+jal	ifcondition_begin_    	0
+setlab	    call_229_	3
+call	    switchcodintion	0
+jal	switchcodintion_begin_    	0
+setlab	    call_232_	3
+=	T41   RET	0
+call	    condition	0
+jal	condition_begin_    	0
+setlab	    call_236_	3
+out	  condition test passed  	0
+ret	     	0
+func	  notyp miscellaneous	0
+setlab	    miscellaneous_begin_	4
+=	_   1	0
+=	a   2	0
+setlab	    _243_label_	1
+=	array i i	0
++	T42 i 1	0
+=	i   T42	0
+blt	_243_label_ i 23	0
+=	ch1   97	0
+=	i   127	0
+=	endid   i	0
+=	_   0	0
+setlab	    _252_label_	1
+*	T43 _ 1	0
+-	T44 T43 _	0
+-	T45 T44 1	0
+/	T46 2 1	0
++	T47 T45 T46	0
+-	T48 T47 1	0
+/	T49 T48 2	0
+=	buf T49 97	0
++	T50 _ 1	0
+=	_   T50	0
+blt	_252_label_ _ endid	0
+=	T51 0 buf	0
+bne	_267_label_ T51 97	0
+out	  miscellaneous test passed  	0
+setlab	    _267_label_	1
+ret	     	0
+func	  notyp miscellaneous_test	0
+setlab	    miscellaneous_test_begin_	4
+call	    miscellaneous	0
+jal	miscellaneous_begin_    	0
+setlab	    call_273_	3
+ret	     	0
+func	  ints fibonaci	0
+para	  ints n	0
+setlab	    fibonaci_begin_	4
+bne	_281_label_ n 0	0
+ret	    0	0
+goto	switch_278_end_    	0
+setlab	    _281_label_	1
+bne	_285_label_ n 1	0
+ret	    1	0
+goto	switch_278_end_    	0
+setlab	    _285_label_	1
+bne	_289_label_ n 2	0
+ret	    1	0
+goto	switch_278_end_    	0
+setlab	    _289_label_	1
+setlab	    switch_278_end_	1
+call	    fibonaci	0
+-	T52 n 1	0
+passpara	    T52	0
+jal	fibonaci_begin_    	0
+setlab	    call_295_	3
+=	T53   RET	0
+call	    fibonaci	0
+-	T54 n 2	0
+passpara	    T54	0
+jal	fibonaci_begin_    	0
+setlab	    call_301_	3
+=	T55   RET	0
++	T56 T53 T55	0
+ret	    T56	0
+func	  notyp fibonaci_test	0
+setlab	    fibonaci_test_begin_	4
+out	  Fibonaci: Please input a unsigned positive integer ?  	0
+in	    n	0
+setlab	    _309_label_	1
+bge	_313_label_ n 0	0
+out	  Input error, try again:  	0
+in	    n	0
+setlab	    _313_label_	1
+blt	_321_label_ n 0	0
+call	    fibonaci	0
+passpara	    n	0
+jal	fibonaci_begin_    	0
+setlab	    call_318_	3
+=	T57   RET	0
+out	  The fibonaci's answer is  T57	0
+setlab	    _321_label_	1
+blt	_309_label_ n 0	0
+ret	     	0
+func	  ints mod	0
+para	  ints n	0
+para	  ints m	0
+setlab	    mod_begin_	4
+/	T58 n m	0
+*	T59 T58 m	0
+-	T60 n T59	0
+ret	    T60	0
+func	  ints gcd	0
+para	  ints n	0
+para	  ints m	0
+setlab	    gcd_begin_	4
+=	rem   0	0
+bne	_339_label_ n 0	0
+ret	    m	0
+setlab	    _339_label_	1
+bne	_342_label_ m 0	0
+ret	    n	0
+setlab	    _342_label_	1
+call	    gcd	0
+passpara	    m	0
+call	    mod	0
+passpara	    n	0
+passpara	    m	0
+jal	mod_begin_    	0
+setlab	    call_349_	3
+=	T61   RET	0
+passpara	    T61	0
+jal	gcd_begin_    	0
+setlab	    call_353_	3
+=	T62   RET	0
+ret	    T62	0
+func	  ints iswronggcd	0
+para	  ints n	0
+para	  ints m	0
+setlab	    iswronggcd_begin_	4
+bgt	_362_label_ n 0	0
+ret	    1	0
+setlab	    _362_label_	1
+bgt	_365_label_ m 0	0
+ret	    1	0
+setlab	    _365_label_	1
+ret	    0	0
+func	  notyp gcd_test	0
+setlab	    gcd_test_begin_	4
+out	  GCD: Please input two unsigned positive integer ?  	0
+in	    n	0
+in	    m	0
+call	    iswronggcd	0
+passpara	    n	0
+passpara	    m	0
+jal	iswronggcd_begin_    	0
+setlab	    call_376_	3
+=	T63   RET	0
+ble	_390_label_ T63 0	0
+setlab	    _379_label_	1
+out	  Input error, try Again:   	0
+in	    n	0
+in	    m	0
+call	    iswronggcd	0
+passpara	    n	0
+passpara	    m	0
+jal	iswronggcd_begin_    	0
+setlab	    call_387_	3
+=	T64   RET	0
+bgt	_379_label_ T64 0	0
+setlab	    _390_label_	1
+call	    gcd	0
+passpara	    n	0
+passpara	    m	0
+jal	gcd_begin_    	0
+setlab	    call_395_	3
+=	T65   RET	0
+out	  The gcd's answer is  T65	0
+ret	     	0
+func	  ints is_prime	0
+para	  ints x	0
+setlab	    is_prime_begin_	4
+=	i   2	0
+bne	_405_label_ x 2	0
+ret	    1	0
+setlab	    _405_label_	1
+setlab	    _406_label_	1
+call	    mod	0
+passpara	    x	0
+passpara	    i	0
+jal	mod_begin_    	0
+setlab	    call_411_	3
+=	T66   RET	0
+bne	_415_label_ T66 0	0
+ret	    0	0
+setlab	    _415_label_	1
++	T67 i 1	0
+=	i   T67	0
+*	T68 i i	0
+blt	_406_label_ T68 x	0
+ret	    1	0
+func	  notyp prime_factorization	0
+para	  ints n	0
+setlab	    prime_factorization_begin_	4
+=	i   2	0
+=	first   0	0
+bne	_429_label_ n 1	0
+out	  1  	0
+ret	     	0
+setlab	    _429_label_	1
+setlab	    _430_label_	1
+call	    is_prime	0
+passpara	    i	0
+jal	is_prime_begin_    	0
+setlab	    call_434_	3
+=	T69   RET	0
+bne	_460_label_ T69 1	0
+call	    mod	0
+passpara	    n	0
+passpara	    i	0
+jal	mod_begin_    	0
+setlab	    call_441_	3
+=	T70   RET	0
+bne	_459_label_ T70 0	0
+setlab	    _444_label_	1
+/	T71 n i	0
+=	n   T71	0
+bne	_449_label_ first 1	0
+out	  *  	0
+setlab	    _449_label_	1
+=	first   1	0
+out	    i	0
+call	    mod	0
+passpara	    n	0
+passpara	    i	0
+jal	mod_begin_    	0
+setlab	    call_456_	3
+=	T72   RET	0
+beq	_444_label_ T72 0	0
+setlab	    _459_label_	1
+setlab	    _460_label_	1
++	T73 i 1	0
+=	i   T73	0
+*	T74 i i	0
+blt	_430_label_ T74 n	0
+beq	_470_label_ n 1	0
+bne	_468_label_ first 1	0
+out	  *  	0
+setlab	    _468_label_	1
+out	    n	0
+setlab	    _470_label_	1
+ret	     	0
+func	  notyp prime_factorization_test	0
+setlab	    prime_factorization_test_begin_	4
+out	  prime_factorization: Please input a unsigned positive integer(<2^31-1) ?  	0
+in	    n	0
+setlab	    _476_label_	1
+bge	_480_label_ n 0	0
+out	  Input error, try again:  	0
+in	    n	0
+setlab	    _480_label_	1
+blt	_476_label_ n 0	0
+out	  The factor of n is   	0
+call	    prime_factorization	0
+passpara	    n	0
+jal	prime_factorization_begin_    	0
+setlab	    call_486_	3
+ret	     	0
+func	  ints iswrong	0
+para	  chars a	0
+setlab	    iswrong_begin_	4
+bne	_493_label_ 69 a	0
+ret	    0	0
+setlab	    _493_label_	1
+bne	_496_label_ 77 a	0
+ret	    0	0
+setlab	    _496_label_	1
+bne	_499_label_ 72 a	0
+ret	    0	0
+setlab	    _499_label_	1
+ret	    1	0
+func	  notyp main	0
+setlab	    main	2
+out	  Please input Test Type:E(Easy), (M)Middle, H(Hard):   	0
+in	    kind	0
+call	    iswrong	0
+passpara	    kind	0
+jal	iswrong_begin_    	0
+setlab	    call_508_	3
+=	T75   RET	0
+ble	_520_label_ T75 0	0
+setlab	    _511_label_	1
+out	  Try Again:   	0
+in	    kind	0
+call	    iswrong	0
+passpara	    kind	0
+jal	iswrong_begin_    	0
+setlab	    call_517_	3
+=	T76   RET	0
+bgt	_511_label_ T76 0	0
+setlab	    _520_label_	1
+bne	_532_label_ kind 69	0
+call	    define_test	0
+jal	define_test_begin_    	0
+setlab	    call_524_	3
+call	    operator_test	0
+jal	operator_test_begin_    	0
+setlab	    call_527_	3
+call	    fibonaci_test	0
+jal	fibonaci_test_begin_    	0
+setlab	    call_530_	3
+goto	switch_521_end_    	0
+setlab	    _532_label_	1
+bne	_547_label_ kind 77	0
+call	    dowhile_test	0
+jal	dowhile_test_begin_    	0
+setlab	    call_536_	3
+call	    condition_test	0
+jal	condition_test_begin_    	0
+setlab	    call_539_	3
+call	    string_test	0
+jal	string_test_begin_    	0
+setlab	    call_542_	3
+call	    gcd_test	0
+jal	gcd_test_begin_    	0
+setlab	    call_545_	3
+goto	switch_521_end_    	0
+setlab	    _547_label_	1
+bne	_571_label_ kind 72	0
+call	    define_test	0
+jal	define_test_begin_    	0
+setlab	    call_551_	3
+call	    operator_test	0
+jal	operator_test_begin_    	0
+setlab	    call_554_	3
+call	    dowhile_test	0
+jal	dowhile_test_begin_    	0
+setlab	    call_557_	3
+call	    condition_test	0
+jal	condition_test_begin_    	0
+setlab	    call_560_	3
+call	    string_test	0
+jal	string_test_begin_    	0
+setlab	    call_563_	3
+call	    miscellaneous_test	0
+jal	miscellaneous_test_begin_    	0
+setlab	    call_566_	3
+call	    prime_factorization_test	0
+jal	prime_factorization_test_begin_    	0
+setlab	    call_569_	3
+goto	switch_521_end_    	0
+setlab	    _571_label_	1
+setlab	    switch_521_end_	1
+ret	     	0

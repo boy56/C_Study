@@ -1,0 +1,37 @@
+void casetype_error(){
+    int a;
+    a = 1;
+    switch(a){
+        case 'a':
+            printf("1");
+        case 1:
+            printf("2");
+    }
+}
+
+void nocase_error(){
+    int a;
+    a = 1;
+    switch(a){
+        printf("3");
+    }
+}
+
+void default_error(){
+    int a;
+    a = 1;
+    switch(a){
+        case 1:
+            printf("4");
+        case 2:
+            printf("5");
+        default:
+            printf("6");
+    }
+}
+
+void main(){
+    casetype_error();
+    nocase_error();
+    default_error();
+}

@@ -1,0 +1,1542 @@
+# Please set to begin at "main"
+.globl main
+.data
+    str_0: .asciiz "define test passed  "
+    str_1: .asciiz "operator test passed  "
+    str_10: .asciiz "error 1  "
+    str_11: .asciiz "error 2  "
+    str_12: .asciiz "condition test passed  "
+    str_13: .asciiz "miscellaneous test passed  "
+    str_14: .asciiz "Fibonaci: Please input a unsigned positive integer ?  "
+    str_15: .asciiz "Input error, try again:  "
+    str_16: .asciiz "The fibonaci's answer is   "
+    str_17: .asciiz "GCD: Please input two unsigned positive integer ?  "
+    str_18: .asciiz "Input error, try Again:   "
+    str_19: .asciiz "The gcd's answer is   "
+    str_2: .asciiz "ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz  "
+    str_20: .asciiz "1  "
+    str_21: .asciiz "*  "
+    str_22: .asciiz "*  "
+    str_23: .asciiz "prime_factorization: Please input a unsigned positive integer(<2^31-1) ?  "
+    str_24: .asciiz "Input error, try again:  "
+    str_25: .asciiz "The factor of n is   "
+    str_26: .asciiz "Please input Test Type:E(Easy), (M)Middle, H(Hard):   "
+    str_27: .asciiz "Try Again:   "
+    str_3: .asciiz "!#$%&'()*+,-./:;<=>?@[]^_`{|}~  "
+    str_4: .asciiz "dowhile test passed  "
+    str_5: .asciiz "ifcondition clause error!  "
+    str_6: .asciiz "ifcondition clause error  "
+    str_7: .asciiz "switchcodintion clause  error!  "
+    str_8: .asciiz "switchcodintion clause  error!  "
+    str_9: .asciiz "error 0  "
+.text
+
+const_define_begin_:
+    li  $v0, 1
+    li  $a0, 1
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    li  $v0, 11
+    li  $a0, 47
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+const_define_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  const_define_begin_
+
+call_9_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    jr  $ra
+
+var_define_begin_:
+    jr  $ra
+
+var_define_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -80
+    jal  var_define_begin_
+
+call_18_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    jr  $ra
+
+define_begin_:
+    jr  $ra
+
+define_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  var_define_test_begin_
+
+call_27_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  const_define_test_begin_
+
+call_30_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -12
+    jal  define_begin_
+
+call_33_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    li  $v0, 4
+    la  $a0, str_0
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+operator_begin_:
+    lw  $8, -12($fp)
+    li  $8, 1
+    li  $9, 3
+    lw  $10, -16($fp)
+    move  $10, $9
+    li  $11, 3
+    lw  $12, -20($fp)
+    move  $12, $11
+    li  $13, -4
+    lw  $14, -24($fp)
+    move  $14, $13
+    lw  $15, -28($fp)
+    li  $15, 5
+    lw  $16, -32($fp)
+    li  $16, 6
+    mul  $17, $10, 3
+    add  $18, $17, $12
+    div  $19, $14, 4
+    sub  $20, $18, $19
+    div  $21, $8, $8
+    add  $22, $20, $21
+    move  $8, $22
+    addi  $23, $8, 0
+    mul  $24, $8, 3
+    add  $25, $23, $24
+    sw  $8, -12($fp)
+    add  $8, $25, $12
+    sw  $9, -36($fp)
+    div  $9, $14, 4
+    sw  $10, -16($fp)
+    sub  $10, $8, $9
+    sw  $11, -40($fp)
+    mul  $11, $15, $16
+    sw  $12, -20($fp)
+    add  $12, $10, $11
+    sw  $13, -44($fp)
+    lw  $13, -16($fp)
+    move  $13, $12
+    sw  $14, -24($fp)
+    sw  $15, -28($fp)
+    lw  $15, -12($fp)
+    sw  $16, -32($fp)
+    li  $16, 0
+    sub  $14, $16, $15
+    mul  $16, $13, 0
+    sw  $17, -48($fp)
+    add  $17, $14, $16
+    sw  $18, -52($fp)
+    li  $18, 1
+    sw  $19, -56($fp)
+    sub  $19, $17, $18
+    sw  $20, -60($fp)
+    lw  $20, -28($fp)
+    move  $20, $19
+    jr  $ra
+
+operator_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -112
+    jal  operator_begin_
+
+call_74_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    li  $v0, 4
+    la  $a0, str_1
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+string_begin_:
+    li  $v0, 4
+    la  $a0, str_2
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    li  $v0, 4
+    la  $a0, str_3
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+string_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  string_begin_
+
+call_86_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    jr  $ra
+
+dowhile_begin_:
+    lw  $8, -12($fp)
+    li  $8, 100
+    sw  $8, -12($fp)
+
+_91_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    blt  $8, 50, _95_label_
+    lw  $9, -12($fp)
+    div  $8, $9, 2
+    move  $9, $8
+    sw  $8, -16($fp)
+    sw  $9, -12($fp)
+
+_95_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bge  $8, 50, _100_label_
+    lw  $9, -12($fp)
+    addi  $8, $9, 10
+    div  $10, $8, 10
+    move  $9, $10
+    sw  $8, -20($fp)
+    sw  $9, -12($fp)
+    sw  $10, -24($fp)
+
+_100_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bge  $8, 10, _91_label_
+
+_102_label_:
+    lw  $9, -12($fp)
+    subi  $8, $9, 1
+    move  $9, $8
+    li  $v0, 4
+    la  $a0, str_4
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    li  $10, 0
+    sw  $8, -28($fp)
+    sw  $9, -12($fp)
+    bgt  $10, 0, _102_label_
+    jr  $ra
+
+dowhile_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -20
+    jal  dowhile_begin_
+
+call_112_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    jr  $ra
+
+ifcondition_begin_:
+    lw  $8, -12($fp)
+    li  $8, 1
+    lw  $9, -16($fp)
+    li  $9, 0
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+    bne  $8, 1, _121_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -20($fp)
+    sw  $9, -16($fp)
+
+_121_label_:
+    lw  $8, -12($fp)
+    li  $8, 2
+    sw  $8, -12($fp)
+    ble  $8, 1, _126_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -24($fp)
+    sw  $9, -16($fp)
+
+_126_label_:
+    lw  $8, -12($fp)
+    li  $8, 0
+    sw  $8, -12($fp)
+    bge  $8, 1, _131_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -28($fp)
+    sw  $9, -16($fp)
+
+_131_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    beq  $8, 1, _135_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -32($fp)
+    sw  $9, -16($fp)
+
+_135_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    blt  $8, 0, _139_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -36($fp)
+    sw  $9, -16($fp)
+
+_139_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bgt  $8, 0, _143_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -40($fp)
+    sw  $9, -16($fp)
+
+_143_label_:
+    li  $8, 2
+    addi  $9, $8, 1
+    li  $10, 3
+    add  $11, $9, $10
+    lw  $12, -16($fp)
+    sw  $8, -44($fp)
+    sw  $9, -48($fp)
+    sw  $10, -52($fp)
+    sw  $11, -56($fp)
+    sw  $12, -16($fp)
+    beq  $12, $11, _150_label_
+    li  $v0, 4
+    la  $a0, str_5
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_150_label_:
+    lw  $8, -16($fp)
+    sw  $8, -16($fp)
+    beq  $8, $8, _153_label_
+    li  $v0, 4
+    la  $a0, str_6
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_153_label_:
+    jr  $ra
+
+switchcodintionans_begin_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 1, _161_label_
+    li  $v1, 2
+    jr  $ra
+    j  switch_158_end_
+
+_161_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 2, _165_label_
+    li  $v1, 3
+    jr  $ra
+    j  switch_158_end_
+
+_165_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 3, _169_label_
+    li  $v1, 4
+    jr  $ra
+    j  switch_158_end_
+
+_169_label_:
+
+switch_158_end_:
+    li  $v1, 5
+    jr  $ra
+
+switchcodintion_begin_:
+    lw  $8, -12($fp)
+    li  $8, 1
+    lw  $9, -16($fp)
+    li  $9, 0
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+
+_176_label_:
+    lw  $9, -12($fp)
+    addi  $8, $9, 1
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -20($fp)
+    sw  $9, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, 0
+    jal  switchcodintionans_begin_
+
+call_181_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    lw  $9, -20($fp)
+    sw  $8, -24($fp)
+    sw  $9, -20($fp)
+    bne  $9, $8, _186_label_
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -28($fp)
+    sw  $9, -16($fp)
+
+_186_label_:
+    lw  $9, -12($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -32($fp)
+    sw  $9, -12($fp)
+    blt  $9, 5, _176_label_
+    lw  $8, -16($fp)
+    sw  $8, -16($fp)
+    beq  $8, 4, _192_label_
+    li  $v0, 4
+    la  $a0, str_7
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_192_label_:
+    lw  $8, -16($fp)
+    sw  $8, -16($fp)
+    ble  $8, 0, _195_label_
+    lw  $8, -12($fp)
+    move  $v1, $8
+    jr  $ra
+
+_195_label_:
+    li  $v0, 4
+    la  $a0, str_8
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+condition_begin_:
+    lw  $8, -12($fp)
+    li  $8, 0
+    sw  $8, -12($fp)
+
+_201_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 0, _207_label_
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    beq  $8, 0, _205_label_
+    li  $v0, 4
+    la  $a0, str_9
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_205_label_:
+    j  switch_202_end_
+
+_207_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 1, _213_label_
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    beq  $8, 1, _211_label_
+    li  $v0, 4
+    la  $a0, str_10
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_211_label_:
+    j  switch_202_end_
+
+_213_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 2, _219_label_
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    beq  $8, 2, _217_label_
+    li  $v0, 4
+    la  $a0, str_11
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_217_label_:
+    j  switch_202_end_
+
+_219_label_:
+
+switch_202_end_:
+    lw  $9, -12($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    sw  $8, -16($fp)
+    sw  $9, -12($fp)
+    blt  $9, 5, _201_label_
+    jr  $ra
+
+condition_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -48
+    jal  ifcondition_begin_
+
+call_229_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -24
+    jal  switchcodintion_begin_
+
+call_232_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    sw  $8, -12($fp)
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -8
+    jal  condition_begin_
+
+call_236_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    li  $v0, 4
+    la  $a0, str_12
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+miscellaneous_begin_:
+    lw  $8, -12($fp)
+    li  $8, 1
+    lw  $9, -16($fp)
+    li  $9, 2
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+
+_243_label_:
+    lw  $8, -112($fp)
+    addi  $9, $8, 5
+    mul  $9, $9, -4
+    add  $9, $9, $fp
+    sw  $8, 0($9)
+    addi  $9, $8, 1
+    move  $8, $9
+    sw  $8, -112($fp)
+    sw  $9, -1148($fp)
+    blt  $8, 23, _243_label_
+    lw  $8, -120($fp)
+    li  $8, 97
+    lw  $9, -112($fp)
+    li  $9, 127
+    lw  $10, -116($fp)
+    move  $10, $9
+    lw  $11, -12($fp)
+    li  $11, 0
+    sw  $8, -120($fp)
+    sw  $9, -112($fp)
+    sw  $10, -116($fp)
+    sw  $11, -12($fp)
+
+_252_label_:
+    lw  $9, -12($fp)
+    mul  $8, $9, 1
+    sub  $10, $8, $9
+    subi  $11, $10, 1
+    li  $12, 2
+    add  $13, $11, $12
+    subi  $14, $13, 1
+    div  $15, $14, 2
+    li  $16, 97
+    addi  $17, $15, 31
+    mul  $17, $17, -4
+    add  $17, $17, $fp
+    sw  $16, 0($17)
+    addi  $17, $9, 1
+    move  $9, $17
+    lw  $18, -116($fp)
+    sw  $8, -1152($fp)
+    sw  $9, -12($fp)
+    sw  $10, -1156($fp)
+    sw  $11, -1160($fp)
+    sw  $12, -1164($fp)
+    sw  $13, -1168($fp)
+    sw  $14, -1172($fp)
+    sw  $15, -1176($fp)
+    sw  $17, -1180($fp)
+    sw  $18, -116($fp)
+    blt  $9, $18, _252_label_
+    lw  $8, -124($fp)
+    sw  $8, -1184($fp)
+    bne  $8, 97, _267_label_
+    li  $v0, 4
+    la  $a0, str_13
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_267_label_:
+    jr  $ra
+
+miscellaneous_test_begin_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -1176
+    jal  miscellaneous_begin_
+
+call_273_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    jr  $ra
+
+fibonaci_begin_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 0, _281_label_
+    li  $v1, 0
+    jr  $ra
+    j  switch_278_end_
+
+_281_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 1, _285_label_
+    li  $v1, 1
+    jr  $ra
+    j  switch_278_end_
+
+_285_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 2, _289_label_
+    li  $v1, 1
+    jr  $ra
+    j  switch_278_end_
+
+_289_label_:
+
+switch_278_end_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $9, -12($fp)
+    subi  $8, $9, 1
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -16($fp)
+    sw  $9, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, -20
+    jal  fibonaci_begin_
+
+call_295_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $10, -12($fp)
+    subi  $9, $10, 2
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -20($fp)
+    sw  $9, -24($fp)
+    sw  $10, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, -20
+    jal  fibonaci_begin_
+
+call_301_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    lw  $10, -20($fp)
+    add  $9, $10, $8
+    move  $v1, $9
+    jr  $ra
+
+fibonaci_test_begin_:
+    li  $v0, 4
+    la  $a0, str_14
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 5
+    syscall
+    move  $8, $v0
+    sw  $8, -12($fp)
+
+_309_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bge  $8, 0, _313_label_
+    li  $v0, 4
+    la  $a0, str_15
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 5
+    syscall
+    move  $8, $v0
+    sw  $8, -12($fp)
+
+_313_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    blt  $8, 0, _321_label_
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -12($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, -20
+    jal  fibonaci_begin_
+
+call_318_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    li  $v0, 4
+    la  $a0, str_16
+    syscall
+    li  $v0, 1
+    move  $a0, $8
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    sw  $8, -16($fp)
+
+_321_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    blt  $8, 0, _309_label_
+    jr  $ra
+
+mod_begin_:
+    lw  $9, -12($fp)
+    lw  $10, -16($fp)
+    div  $8, $9, $10
+    mul  $11, $8, $10
+    sub  $12, $9, $11
+    move  $v1, $12
+    jr  $ra
+
+gcd_begin_:
+    lw  $8, -20($fp)
+    li  $8, 0
+    lw  $9, -12($fp)
+    sw  $8, -20($fp)
+    sw  $9, -12($fp)
+    bne  $9, 0, _339_label_
+    lw  $8, -16($fp)
+    move  $v1, $8
+    jr  $ra
+
+_339_label_:
+    lw  $8, -16($fp)
+    sw  $8, -16($fp)
+    bne  $8, 0, _342_label_
+    lw  $8, -12($fp)
+    move  $v1, $8
+    jr  $ra
+
+_342_label_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -16($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $9, -12($fp)
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -16($fp)
+    sw  $9, -12($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, -12
+    jal  mod_begin_
+
+call_349_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -24($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, -12
+    jal  gcd_begin_
+
+call_353_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    move  $v1, $8
+    jr  $ra
+
+iswronggcd_begin_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bgt  $8, 0, _362_label_
+    li  $v1, 1
+    jr  $ra
+
+_362_label_:
+    lw  $8, -16($fp)
+    sw  $8, -16($fp)
+    bgt  $8, 0, _365_label_
+    li  $v1, 1
+    jr  $ra
+
+_365_label_:
+    li  $v1, 0
+    jr  $ra
+
+gcd_test_begin_:
+    li  $v0, 4
+    la  $a0, str_17
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 5
+    syscall
+    move  $8, $v0
+    lw  $9, -16($fp)
+    li  $v0, 5
+    syscall
+    move  $9, $v0
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, 0
+    jal  iswronggcd_begin_
+
+call_376_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -20($fp)
+    ble  $8, 0, _390_label_
+
+_379_label_:
+    li  $v0, 4
+    la  $a0, str_18
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 5
+    syscall
+    move  $8, $v0
+    lw  $9, -16($fp)
+    li  $v0, 5
+    syscall
+    move  $9, $v0
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, 0
+    jal  iswronggcd_begin_
+
+call_387_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -24($fp)
+    bgt  $8, 0, _379_label_
+
+_390_label_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -12($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    lw  $9, -16($fp)
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, -12
+    jal  gcd_begin_
+
+call_395_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    li  $v0, 4
+    la  $a0, str_19
+    syscall
+    li  $v0, 1
+    move  $a0, $8
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+is_prime_begin_:
+    lw  $8, -16($fp)
+    li  $8, 2
+    lw  $9, -12($fp)
+    sw  $8, -16($fp)
+    sw  $9, -12($fp)
+    bne  $9, 2, _405_label_
+    li  $v1, 1
+    jr  $ra
+
+_405_label_:
+
+_406_label_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -12($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    lw  $9, -16($fp)
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, -12
+    jal  mod_begin_
+
+call_411_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -20($fp)
+    bne  $8, 0, _415_label_
+    li  $v1, 0
+    jr  $ra
+
+_415_label_:
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    mul  $10, $9, $9
+    lw  $11, -12($fp)
+    sw  $8, -24($fp)
+    sw  $9, -16($fp)
+    sw  $10, -28($fp)
+    sw  $11, -12($fp)
+    blt  $10, $11, _406_label_
+    li  $v1, 1
+    jr  $ra
+
+prime_factorization_begin_:
+    lw  $8, -16($fp)
+    li  $8, 2
+    lw  $9, -20($fp)
+    li  $9, 0
+    lw  $10, -12($fp)
+    sw  $8, -16($fp)
+    sw  $9, -20($fp)
+    sw  $10, -12($fp)
+    bne  $10, 1, _429_label_
+    li  $v0, 4
+    la  $a0, str_20
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    jr  $ra
+
+_429_label_:
+
+_430_label_:
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -16($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -16($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, -16
+    jal  is_prime_begin_
+
+call_434_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -24($fp)
+    bne  $8, 1, _460_label_
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -12($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    lw  $9, -16($fp)
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    sw  $9, -16($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, -12
+    jal  mod_begin_
+
+call_441_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -28($fp)
+    bne  $8, 0, _459_label_
+
+_444_label_:
+    lw  $9, -12($fp)
+    lw  $10, -16($fp)
+    div  $8, $9, $10
+    move  $9, $8
+    lw  $11, -20($fp)
+    sw  $8, -32($fp)
+    sw  $9, -12($fp)
+    sw  $10, -16($fp)
+    sw  $11, -20($fp)
+    bne  $11, 1, _449_label_
+    li  $v0, 4
+    la  $a0, str_21
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_449_label_:
+    lw  $8, -20($fp)
+    li  $8, 1
+    lw  $9, -16($fp)
+    li  $v0, 1
+    move  $a0, $9
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $10, -12($fp)
+    sw  $10, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $9, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -20($fp)
+    sw  $9, -16($fp)
+    sw  $10, -12($fp)
+    subi  $fp, $sp, -20
+    addi  $sp, $sp, -12
+    jal  mod_begin_
+
+call_456_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -36($fp)
+    beq  $8, 0, _444_label_
+
+_459_label_:
+
+_460_label_:
+    lw  $9, -16($fp)
+    addi  $8, $9, 1
+    move  $9, $8
+    mul  $10, $9, $9
+    lw  $11, -12($fp)
+    sw  $8, -40($fp)
+    sw  $9, -16($fp)
+    sw  $10, -44($fp)
+    sw  $11, -12($fp)
+    blt  $10, $11, _430_label_
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    beq  $8, 1, _470_label_
+    lw  $8, -20($fp)
+    sw  $8, -20($fp)
+    bne  $8, 1, _468_label_
+    li  $v0, 4
+    la  $a0, str_22
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+
+_468_label_:
+    lw  $8, -12($fp)
+    li  $v0, 1
+    move  $a0, $8
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    sw  $8, -12($fp)
+
+_470_label_:
+    jr  $ra
+
+prime_factorization_test_begin_:
+    li  $v0, 4
+    la  $a0, str_23
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 5
+    syscall
+    move  $8, $v0
+    sw  $8, -12($fp)
+
+_476_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bge  $8, 0, _480_label_
+    li  $v0, 4
+    la  $a0, str_24
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 5
+    syscall
+    move  $8, $v0
+    sw  $8, -12($fp)
+
+_480_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    blt  $8, 0, _476_label_
+    li  $v0, 4
+    la  $a0, str_25
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    lw  $8, -12($fp)
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, -32
+    jal  prime_factorization_begin_
+
+call_486_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    jr  $ra
+
+iswrong_begin_:
+    lw  $8, -12($fp)
+    li  $9, 69
+    sw  $8, -12($fp)
+    bne  $9, $8, _493_label_
+    li  $v1, 0
+    jr  $ra
+
+_493_label_:
+    lw  $8, -12($fp)
+    li  $9, 77
+    sw  $8, -12($fp)
+    bne  $9, $8, _496_label_
+    li  $v1, 0
+    jr  $ra
+
+_496_label_:
+    lw  $8, -12($fp)
+    li  $9, 72
+    sw  $8, -12($fp)
+    bne  $9, $8, _499_label_
+    li  $v1, 0
+    jr  $ra
+
+_499_label_:
+    li  $v1, 1
+    jr  $ra
+
+main:
+    la  $ra, exit
+    move  $fp, $sp
+    addi  $sp, $sp, -24
+    li  $v0, 4
+    la  $a0, str_26
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 12
+    syscall
+    move  $8, $v0
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, 0
+    jal  iswrong_begin_
+
+call_508_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -16($fp)
+    ble  $8, 0, _520_label_
+
+_511_label_:
+    li  $v0, 4
+    la  $a0, str_27
+    syscall
+    li  $v0, 11
+    li  $a0, 10
+    syscall
+    lw  $8, -12($fp)
+    li  $v0, 12
+    syscall
+    move  $8, $v0
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    sw  $8, 0($sp)
+    addi  $sp, $sp, -4
+    sw  $8, -12($fp)
+    subi  $fp, $sp, -16
+    addi  $sp, $sp, 0
+    jal  iswrong_begin_
+
+call_517_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    move  $8, $v1
+    sw  $8, -20($fp)
+    bgt  $8, 0, _511_label_
+
+_520_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 69, _532_label_
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  define_test_begin_
+
+call_524_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  operator_test_begin_
+
+call_527_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -8
+    jal  fibonaci_test_begin_
+
+call_530_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    j  switch_521_end_
+
+_532_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 77, _547_label_
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  dowhile_test_begin_
+
+call_536_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -4
+    jal  condition_test_begin_
+
+call_539_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  string_test_begin_
+
+call_542_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -20
+    jal  gcd_test_begin_
+
+call_545_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    j  switch_521_end_
+
+_547_label_:
+    lw  $8, -12($fp)
+    sw  $8, -12($fp)
+    bne  $8, 72, _571_label_
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  define_test_begin_
+
+call_551_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  operator_test_begin_
+
+call_554_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  dowhile_test_begin_
+
+call_557_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -4
+    jal  condition_test_begin_
+
+call_560_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  string_test_begin_
+
+call_563_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, 0
+    jal  miscellaneous_test_begin_
+
+call_566_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    sw  $ra, 0($fp)
+    sw  $fp, -4($sp)
+    addi  $sp, $sp, -12
+    subi  $fp, $sp, -12
+    addi  $sp, $sp, -4
+    jal  prime_factorization_test_begin_
+
+call_569_:
+    move  $sp, $fp
+    lw  $fp, -4($fp)
+    lw  $ra, 0($fp)
+    j  switch_521_end_
+
+_571_label_:
+
+switch_521_end_:
+    jr  $ra
+exit:

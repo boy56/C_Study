@@ -1,0 +1,13 @@
+index	eltyp	high	
+0	ints	2048	
+1	chars	1024	
+2	chars	2048	
+3	ints	1	
+4	ints	2	
+5	ints	3	
+6	chars	1	
+7	chars	2	
+8	chars	3	
+9	chars	1	
+10	ints	23	
+11	chars	256	

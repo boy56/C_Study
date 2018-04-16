@@ -1,0 +1,13 @@
+Error: 常量的赋值与声明的类型不符   line: 2
+Error: 应该为关键字int 或 char   line: 3
+Error: 缺少'='   line: 4
+Error: 非零整数以0开头,已进行容错,例如0123取123   line: 5
+Error: 变量声明格式错误   line: 10
+Error: 数组声明格式错误   line: 11
+Error: 数组声明格式错误   line: 12
+Error: 标识符(变量名 or 常量名 or 函数名)重复定义   line: 13
+Error: 标识符(变量名 or 常量名 or 函数名)未定义   line: 17
+Error: 不能对常量赋值   line: 18
+Error: 数组下标错误(越界或非法表达)   line: 19
+Error: 数组下标错误(越界或非法表达)   line: 20
+Error: 数组下标错误(越界或非法表达)   line: 21

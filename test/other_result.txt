@@ -1,0 +1,3 @@
+dowhile_test passed  
+if_test passed  
+switch_test passed  

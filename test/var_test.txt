@@ -1,0 +1,36 @@
+const int a1 = -9, b1 = 0, b2 = 10;
+const char c1 = 'a', e = 'e';
+const int a2 = +123;
+const char c2 = 'c';
+
+int v_a, v_b, v_c[10], d;
+char v_f;
+char v_e;
+
+
+void main(){
+	v_a = 97;
+	v_b = 98;
+	v_c[0] = 8;
+	d = 9;
+	v_f = 'a';
+	v_e = 'f';
+
+
+	printf("a1 must be -9: ",a1);
+	printf("b1 must be 0: ", b1);
+	printf("b2 must be 10: ",b2);
+	printf("c1 must be a: ", c1);
+	printf("e must be e: ", e);
+	printf("a2 must be 123: ",a2);
+	printf("c2 must be c: ", c2);
+
+	printf("v_a must be 97: ",v_a);
+	printf("v_b must be 98: ",v_b);
+	printf("v_c[0] must be 8: ",v_c[0]);
+	printf("d must be 9: ",d);
+	printf("v_f must be a: ",v_f);
+	printf("v_e must be f: ",v_e);
+
+	return;
+}

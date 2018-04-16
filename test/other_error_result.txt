@@ -1,0 +1,4 @@
+Error: if、while后面必须跟条件语句   line: 4
+Error: 标识符(变量名 or 常量名 or 函数名)未定义   line: 6
+Error: 缺少while   line: 16
+Error: if、while后面必须跟条件语句   line: 20

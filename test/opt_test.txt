@@ -1,0 +1,62 @@
+const int MAX_NUM = 1024;
+
+void exp_loop(){
+	int i;
+	int a, b, c, d, e;
+	a = 1;
+	b = 2;
+	i = 0;
+	do{
+		c = a + b + a + b;
+		d = a + b + a + b + c;
+		e = c + d;
+		i = i + 1;
+	}while(i < MAX_NUM)
+	printf("c must be 6:", c);
+	printf("d must be 12:", d);
+	printf("e must be 18:", e);
+}
+
+
+void complete_num()
+{
+  int k[1024];
+  int i,j,n,s,x1;
+  int m,k2,h,leap,x2;
+
+  j = 2;
+  do{
+    n = -1;
+    s = j;
+	i = 1;
+	do{
+		x1 = (j/i) * i ;
+		if( x1 == j ){
+	        n = n + 1;
+	        s = s - i;
+		if (n >= 1024)
+			printf("OVERFLOW! ") ;
+	    if (n < 1024)
+			k[n] = i;
+		}
+		i = i + 1;
+	}while(i < j)
+
+	if(s==0){
+		printf("complete number: ",j);
+		i = 0;
+		do{
+			printf("  ",k[i]);
+			i = i + 1;
+		}while(i <= n)
+	 printf("  ") ;
+    }
+	j = j + 1;
+  }while(j < MAX_NUM)
+}
+
+void main()
+{
+   exp_loop();
+   complete_num();
+}

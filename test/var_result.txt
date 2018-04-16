@@ -1,0 +1,13 @@
+a1 must be -9:   -9
+b1 must be 0:   0
+b2 must be 10:   10
+c1 must be a:   a
+e must be e:   e
+a2 must be 123:   123
+c2 must be c:   c
+v_a must be 97:   97
+v_b must be 98:   98
+v_c[0] must be 8:   8
+d must be 9:   9
+v_f must be a:   a
+v_e must be f:   f

@@ -1,0 +1,28 @@
+void if_error(){
+    int a, i;
+    a = 1;
+    if() a = 2;
+    if(a == 2) i = i + 1;
+    else i = i + 1;
+}
+
+void loop_error(){
+    int a, i;
+    a = 1;
+    i = 1;
+
+    do{
+        a = a + 1;
+    }wh()
+
+    do{
+        a = a + 1;
+    }while()
+
+
+}
+
+void main(){
+    if_error();
+    loop_error();
+}

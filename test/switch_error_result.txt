@@ -1,0 +1,3 @@
+Error: case 常量与switch中表达式类型不符   line: 5
+Error: case语句格式错误   line: 16                //缺少case的情况
+Error: case语句格式错误   line: 28               //有default的情况
