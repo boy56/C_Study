@@ -770,6 +770,7 @@ namespace compiler{
 			paracount++;
 			while (sy == comma) {
 				insymbol();
+				is_char = false;
 				if (!find_sy(expression_start_sys, 6)) {
 					error(33,lc);
 					skip(tmp_sys, 1);
@@ -872,6 +873,7 @@ namespace compiler{
 			paracount++;
 			while (sy == comma) {
 				insymbol();
+				is_char = false;
 				if (!find_sy(expression_start_sys, 6)) {
 					error(33, lc);
 					skip(tmp_sys, 1);
