@@ -1,58 +1,58 @@
 /*
-	Óï·¨ÓïÒå·ÖÎö, ½«Ô´³ÌĞò×ª»»ÎªËÄÔªÊ½ÖĞ¼äÖ¸Áî
+	è¯­æ³•è¯­ä¹‰åˆ†æ, å°†æºç¨‹åºè½¬æ¢ä¸ºå››å…ƒå¼ä¸­é—´æŒ‡ä»¤
 */
 
-//×¢Òâ¶ÔÕûÊıµÄ´¦Àí²ğ¿ªÀ´ÅĞ¶Ï
+//æ³¨æ„å¯¹æ•´æ•°çš„å¤„ç†æ‹†å¼€æ¥åˆ¤æ–­
 #include <iostream>
 #include "blockdeal.h"
 namespace compiler{
-	int temp_num = 0;	//Éú³ÉÁÙÊ±±äÁ¿Ê±Ê¹ÓÃ
-	//std::map<std::string, int> MidLabelMap;		//±êÇ©ÓëÎ»ÖÃË÷Òı±í
-	int PC = 0;				//µ±Ç°PCÖµ
+	int temp_num = 0;	//ç”Ÿæˆä¸´æ—¶å˜é‡æ—¶ä½¿ç”¨
+	//std::map<std::string, int> MidLabelMap;		//æ ‡ç­¾ä¸ä½ç½®ç´¢å¼•è¡¨
+	int PC = 0;				//å½“å‰PCå€¼
 	std::fstream gram_out_file;
-	int return_flag = 0; //ÔÚÃ¿´Î½øÈëº¯Êı¶¨ÒåµÄÊ±ºòÉèÖÃÎª0,ÔÚreturnÓï¾äÖĞÉèÖÃÎª1»ò2,ÆäÖĞ1´ú±íÃ»ÓĞ·µ»ØÖµ,2´ú±íÓĞ·µ»ØÖµ
-						//È»ºóÔÚº¯Êı¶¨Òå½áÊøÊ±½øĞĞ¼ì²é,voidº¯Êı±ØĞëÎª0»ò1,intº¯ÊıÎª2, charº¯ÊıÎª3
+	int return_flag = 0; //åœ¨æ¯æ¬¡è¿›å…¥å‡½æ•°å®šä¹‰çš„æ—¶å€™è®¾ç½®ä¸º0,åœ¨returnè¯­å¥ä¸­è®¾ç½®ä¸º1æˆ–2,å…¶ä¸­1ä»£è¡¨æ²¡æœ‰è¿”å›å€¼,2ä»£è¡¨æœ‰è¿”å›å€¼
+						//ç„¶ååœ¨å‡½æ•°å®šä¹‰ç»“æŸæ—¶è¿›è¡Œæ£€æŸ¥,voidå‡½æ•°å¿…é¡»ä¸º0æˆ–1,intå‡½æ•°ä¸º2, charå‡½æ•°ä¸º3
 
-	symbol	block_start_sys[] = {constsy, voidsy, intsy, charsy};	//4¸ö
-	symbol  statement_start_sys[] = { semicolon, ifsy, dosy, lcbrack, ident, scanfsy, printfsy, switchsy, returnsy}; //9¸ö
-	symbol  statement_end_sys[] = { semicolon, rparent, rcbrack }; //3¸ö
-	symbol  expression_start_sys[] = {ident, plus, minus, intcon, charcon, lparent}; //6¸ö
-	//symbol  expression_end_sys[] = { ident, rsbrack, intcon, charcon, rparent }; //5¸ö
+	symbol	block_start_sys[] = {constsy, voidsy, intsy, charsy};	//4ä¸ª
+	symbol  statement_start_sys[] = { semicolon, ifsy, dosy, lcbrack, ident, scanfsy, printfsy, switchsy, returnsy}; //9ä¸ª
+	symbol  statement_end_sys[] = { semicolon, rparent, rcbrack }; //3ä¸ª
+	symbol  expression_start_sys[] = {ident, plus, minus, intcon, charcon, lparent}; //6ä¸ª
+	//symbol  expression_end_sys[] = { ident, rsbrack, intcon, charcon, rparent }; //5ä¸ª
 
-	symbol	follow_expression_sys[] = { semicolon, rparent, rsbrack, lss, leq, gtr, geq, neq, eql, comma};	//10¸ö,×îºóÒ»¸öÔÚ´¦Àíº¯Êıµ÷ÓÃÓï¾äÊ±ºò²ÅÓÃ
+	symbol	follow_expression_sys[] = { semicolon, rparent, rsbrack, lss, leq, gtr, geq, neq, eql, comma};	//10ä¸ª,æœ€åä¸€ä¸ªåœ¨å¤„ç†å‡½æ•°è°ƒç”¨è¯­å¥æ—¶å€™æ‰ç”¨
 
-	symbol  factor_start_sys[] = { ident, plus, minus, intcon, charcon, lparent }; //6¸ö
-	symbol  factor_end_sys[] = { ident, rsbrack, intcon, charcon, rparent };//5¸ö
+	symbol  factor_start_sys[] = { ident, plus, minus, intcon, charcon, lparent }; //6ä¸ª
+	symbol  factor_end_sys[] = { ident, rsbrack, intcon, charcon, rparent };//5ä¸ª
 
-	//²¿·Öº¯ÊıÉùÃ÷
+	//éƒ¨åˆ†å‡½æ•°å£°æ˜
 	std::string reUseFuncStatement();
 	std::string expression(bool& is_char);
 	std::string factor(bool& is_char);
 	void statement();
 
 
-	//Ìø¶ÁÔ´³ÌĞòÖ±µ½È¡µ½µÄ×Ö·ûÊôÓÚ¸ø¶¨µÄ·ûºÅ¼¯st, nÎªÊı×é´óĞ¡
+	//è·³è¯»æºç¨‹åºç›´åˆ°å–åˆ°çš„å­—ç¬¦å±äºç»™å®šçš„ç¬¦å·é›†st, nä¸ºæ•°ç»„å¤§å°
 	void skip(symbol st[], int n) {
 		while (!find_sy(st, n)) insymbol();
 	}
 
-	//Éú³É±êÇ©,²ÎÊıl_kindÎª±êÇ©ÀàĞÍ, ÔÚsµÄ»ù´¡ÉÏÔö¼Ó±êÇ©  pcÎªµ±Ç°ÖĞ¼äÖ¸ÁîµÄÎ»ÖÃ(MidCodeT´ËÊ±µÄË÷ÒıÖµ),Ë÷ÒılabelÊ±Ê¹ÓÃ
+	//ç”Ÿæˆæ ‡ç­¾,å‚æ•°l_kindä¸ºæ ‡ç­¾ç±»å‹, åœ¨sçš„åŸºç¡€ä¸Šå¢åŠ æ ‡ç­¾  pcä¸ºå½“å‰ä¸­é—´æŒ‡ä»¤çš„ä½ç½®(MidCodeTæ­¤æ—¶çš„ç´¢å¼•å€¼),ç´¢å¼•labelæ—¶ä½¿ç”¨
 	std::string creat_label(std::string s, int l_kind, int pc){
 		std::string label;
 		switch(l_kind){
-			case 0:	//º¯ÊıÀàÆğÊ¼±êÇ©
+			case 0:	//å‡½æ•°ç±»èµ·å§‹æ ‡ç­¾
 				label =  s + "_begin_";
 				break;
-			case 1:	//º¯ÊıÀà½áÊø±êÇ©
+			case 1:	//å‡½æ•°ç±»ç»“æŸæ ‡ç­¾
 				label =  s + "_end_";
 				break;
-			case 2: //if¡¢whileµÈÌø×ª,ÔÚstatementµÄÄ©Î²Ê¹ÓÃ
+			case 2: //ifã€whileç­‰è·³è½¬,åœ¨statementçš„æœ«å°¾ä½¿ç”¨
 				label = "_" + int_to_string(pc) + "_label_";
 				break;
-			case 3: //switch_end±êÇ©
+			case 3: //switch_endæ ‡ç­¾
 				label = "switch_" + int_to_string(pc) + "_end_";
 				break;
-			case 4: //callº¯ÊıÖ®ºó·µ»ØµØÖ·±êÇ©,ÓÃÓÚ±ê¼ÇÈë¿ÚÓï¾ä
+			case 4: //callå‡½æ•°ä¹‹åè¿”å›åœ°å€æ ‡ç­¾,ç”¨äºæ ‡è®°å…¥å£è¯­å¥
 				label = "call_" + int_to_string(pc) + "_";
 				break;
 			default:
@@ -63,7 +63,7 @@ namespace compiler{
 		return label;
 	}
 
-	//Éú³ÉÁÙÊ±±äÁ¿
+	//ç”Ÿæˆä¸´æ—¶å˜é‡
 	std::string creat_tmp_var(){
 		std::string tmp = int_to_string(temp_num);
 		std::string t_var = "T" + tmp;
@@ -89,7 +89,7 @@ namespace compiler{
 		}
 	}
 
-	//<³£Á¿ËµÃ÷> <³£Á¿¶¨Òå> ´¦Àí
+	//<å¸¸é‡è¯´æ˜> <å¸¸é‡å®šä¹‰> å¤„ç†
 	void constDeal(){
 		//std::cout<<"This is a const statement"<<std::endl;
 		gram_out_file<<"This is a const statement"<<std::endl;
@@ -110,7 +110,7 @@ namespace compiler{
 				skip(block_start_sys, 4);
 				return;
 			}
-			enter(id, constant, tmp_typ);//½«³£Á¿µÇ¼ÇÈë±í
+			enter(id, constant, tmp_typ);//å°†å¸¸é‡ç™»è®°å…¥è¡¨
 			insymbol();
 
 			if (sy != assign) {
@@ -119,10 +119,10 @@ namespace compiler{
 				return;
 			}
 
-			insymbol();	//¶Áµ½µÄÊÇµÈºÅºóÃæµÄµ¥´Ê
+			insymbol();	//è¯»åˆ°çš„æ˜¯ç­‰å·åé¢çš„å•è¯
 
 			if ((sy == plus) || (sy == minus) || (sy == intcon)) {
-				//½øÈëÕûÊı·ÖÖ§
+				//è¿›å…¥æ•´æ•°åˆ†æ”¯
 				if (tmp_typ != ints) {
 					error(27,lc);
 					skip(block_start_sys, 4);
@@ -139,7 +139,7 @@ namespace compiler{
 					return;
 				}
 				inum = inum * flag;
-				enterVar(tab.t - 1, inum);//½«³£Á¿µÄÖµµÇÂ¼½øÈ¥
+				enterVar(tab.t - 1, inum);//å°†å¸¸é‡çš„å€¼ç™»å½•è¿›å»
 			}
 			else if (sy == charcon) {
 				if (tmp_typ != chars) {
@@ -161,20 +161,20 @@ namespace compiler{
 			error(19, lc-1);
 			return;
 		}
-		insymbol();//¶ÁÈ¡·ÖºÅºóÃæÒ»¸ö×Ö·û
+		insymbol();//è¯»å–åˆ†å·åé¢ä¸€ä¸ªå­—ç¬¦
 	}
 
-	//<±äÁ¿ËµÃ÷> <±äÁ¿¶¨Òå> ´¦Àí   ²ÎÊınÎª¸ÃĞĞµÚÒ»¸ö±êÊ¶·ûÔÚÊı¾İÕ»µÄÏà¶ÔµØÖ·
+	//<å˜é‡è¯´æ˜> <å˜é‡å®šä¹‰> å¤„ç†   å‚æ•°nä¸ºè¯¥è¡Œç¬¬ä¸€ä¸ªæ ‡è¯†ç¬¦åœ¨æ•°æ®æ ˆçš„ç›¸å¯¹åœ°å€
 	void varDeal(types typ, int &n){
 		//std::cout << "This is a var_declare statement" << std::endl;
 		gram_out_file << "This is var_declare statement" << std::endl;
-		//½øÈëÊ±idÎª int/char ºóÃæµÚÒ»¸ö±êÊ¶·û£¬sy == comma || sy == semicolon || sy = lsbrack
+		//è¿›å…¥æ—¶idä¸º int/char åé¢ç¬¬ä¸€ä¸ªæ ‡è¯†ç¬¦ï¼Œsy == comma || sy == semicolon || sy = lsbrack
 		if (sy == lsbrack) {
 			enter(id, array, typ);
 			insymbol();
 			if ((sy == intcon) && (inum != 0)) {
-				enterVar(tab.t - 1, n);	//°ÑÊı×éµÄµÚÒ»¸öÔªËØÏà¶ÔµØÖ·´æ·ÅÆğÀ´
-				n += inum;	//inum¸ö¿Õ¼ä¶¼ÊÇ¸ÃÊı×éµÄ
+				enterVar(tab.t - 1, n);	//æŠŠæ•°ç»„çš„ç¬¬ä¸€ä¸ªå…ƒç´ ç›¸å¯¹åœ°å€å­˜æ”¾èµ·æ¥
+				n += inum;	//inumä¸ªç©ºé—´éƒ½æ˜¯è¯¥æ•°ç»„çš„
 				enterArray(tab.t - 1, typ, inum);
 				insymbol();
 				if (sy != rsbrack) {
@@ -199,10 +199,10 @@ namespace compiler{
 			enter(id, variable, typ);
 			enterVar(tab.t - 1, n++);
 		}
-		//½ØÖ¹µ½ÕâÀï sy == comma || sy == semicolon
+		//æˆªæ­¢åˆ°è¿™é‡Œ sy == comma || sy == semicolon
 		while (sy == comma) {
 			insymbol();
-			if (sy != ident) {	//·Ç±êÊ¶·û,Ìø¶ÁÍêÒ»ĞĞ´¦ÀíÏÂÒ»ĞĞ
+			if (sy != ident) {	//éæ ‡è¯†ç¬¦,è·³è¯»å®Œä¸€è¡Œå¤„ç†ä¸‹ä¸€è¡Œ
 				error(11,lc);
 				skip(block_start_sys, 4);
 				return;
@@ -213,12 +213,12 @@ namespace compiler{
 				skip(block_start_sys, 4);
 				return;
 			}
-			if (sy == lsbrack) {	//¸Ãif½áÊøºósy=comma or sy = semicolon
+			if (sy == lsbrack) {	//è¯¥ifç»“æŸåsy=comma or sy = semicolon
 				enter(id, array, typ);
 				insymbol();
 				if ((sy == intcon) && (inum != 0)) {
-					enterVar(tab.t - 1, n);	//°ÑÊı×éµÄµÚÒ»¸öÔªËØÏà¶ÔµØÖ·´æ·ÅÆğÀ´
-					n += inum;	//inum¸ö¿Õ¼ä¶¼ÊÇ¸ÃÊı×éµÄ
+					enterVar(tab.t - 1, n);	//æŠŠæ•°ç»„çš„ç¬¬ä¸€ä¸ªå…ƒç´ ç›¸å¯¹åœ°å€å­˜æ”¾èµ·æ¥
+					n += inum;	//inumä¸ªç©ºé—´éƒ½æ˜¯è¯¥æ•°ç»„çš„
 					enterArray(tab.t - 1, typ, inum);
 					insymbol();
 					if (sy != rsbrack) {
@@ -248,30 +248,30 @@ namespace compiler{
 			error(19,lc);
 			return;
 		}
-		insymbol();//¶ÁÈ¡·ÖºÅÖ®ºóµÚÒ»¸öµ¥´Ê
+		insymbol();//è¯»å–åˆ†å·ä¹‹åç¬¬ä¸€ä¸ªå•è¯
 	}
 
-	//<Òò×Ó>
-	//·µ»ØÖµÎª²Ù×÷Êı
+	//<å› å­>
+	//è¿”å›å€¼ä¸ºæ“ä½œæ•°
 	std::string factor(bool& is_char) {
-		//½øÒò×ÓÊ±,syÎª factor_start_sys[]ÖĞµÄÔªËØ
+		//è¿›å› å­æ—¶,syä¸º factor_start_sys[]ä¸­çš„å…ƒç´ 
 		std::string z, y, x;
 		bool char_tmp = false;
-		int pos, tmp;	//tmp ÔÚminusÖĞÊ¹ÓÃ
+		int pos, tmp;	//tmp åœ¨minusä¸­ä½¿ç”¨
 		symbol tmp_sys[] = { rparent };
 		switch (sy) {
-		case ident:	//±êÊ¶·û¡¢±êÊ¶·û[±í´ïÊ½]¡¢ÓĞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä
-			pos = find_in_tab(id);	//ÔÚtab±íÖĞ²éÑ¯µ±Ç°µ¥´ÊÊÇÉ¶
+		case ident:	//æ ‡è¯†ç¬¦ã€æ ‡è¯†ç¬¦[è¡¨è¾¾å¼]ã€æœ‰è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥
+			pos = find_in_tab(id);	//åœ¨tabè¡¨ä¸­æŸ¥è¯¢å½“å‰å•è¯æ˜¯å•¥
 			if (pos == 0) error(23, lc);
 			
 			if (pos != 0) {
 				if (tab.tabArray[pos].type == chars) is_char = true;
 				switch (tab.tabArray[pos].obj) {
-				case constant:	//³£Á¿Ö±½Ó·µ»ØÊı
+				case constant:	//å¸¸é‡ç›´æ¥è¿”å›æ•°
 					return int_to_string(tab.tabArray[pos].adr);
-				case variable:	//±äÁ¿·µ»Ø±äÁ¿Ãû
+				case variable:	//å˜é‡è¿”å›å˜é‡å
 					return id;
-				case array:		//±êÊ¶·û[±í´ïÊ½]
+				case array:		//æ ‡è¯†ç¬¦[è¡¨è¾¾å¼]
 					y = id;
 					z = creat_tmp_var();
 					insymbol();
@@ -281,8 +281,8 @@ namespace compiler{
 					}
 					insymbol();
 					skip(expression_start_sys, 6);
-					x = expression(char_tmp);	//´¦ÀíÖĞÀ¨ºÅµÄ±í´ïÊ½,³öÀ´Ê±syÎªfollow_expression_sys[]ÖĞµÄÔªËØ
-					if (char_tmp) {	//tmpÎª±íÊ¾Îª×Ö·ûÀàĞÍ
+					x = expression(char_tmp);	//å¤„ç†ä¸­æ‹¬å·çš„è¡¨è¾¾å¼,å‡ºæ¥æ—¶syä¸ºfollow_expression_sys[]ä¸­çš„å…ƒç´ 
+					if (char_tmp) {	//tmpä¸ºè¡¨ç¤ºä¸ºå­—ç¬¦ç±»å‹
 						error(49, lc);
 					}
 					else {
@@ -298,32 +298,32 @@ namespace compiler{
 					}
 
 					enterMidCode(4, z, x, y, 0);	//z = y[x]
-													//´ËÊ±syÎªrsbrack
+													//æ­¤æ—¶syä¸ºrsbrack
 					return z;
 				case function:
-					if (tab.tabArray[pos].type == notyp) {	//ÎŞ·µ»ØÖµº¯Êıµ÷ÓÃ
+					if (tab.tabArray[pos].type == notyp) {	//æ— è¿”å›å€¼å‡½æ•°è°ƒç”¨
 						error(34, lc);
 						skip(tmp_sys,1);
 						return "0";
 					}
 					if (tab.tabArray[pos].type == chars) is_char = true;
 					else is_char = false;
-					//½øÈëreUseFuncStatementÊ±,sy == identsy(º¯ÊıÃû)
+					//è¿›å…¥reUseFuncStatementæ—¶,sy == identsy(å‡½æ•°å)
 					z = reUseFuncStatement();
 
-					//´ËÊ± syÎª rparent
-					return z;	//·µ»ØÓĞ·µ»ØÖµº¯ÊıµÄµ÷ÓÃ×îºóµÄ¸³Öµ½á¹û²Ù×÷Êı, ¼´z = RET
+					//æ­¤æ—¶ syä¸º rparent
+					return z;	//è¿”å›æœ‰è¿”å›å€¼å‡½æ•°çš„è°ƒç”¨æœ€åçš„èµ‹å€¼ç»“æœæ“ä½œæ•°, å³z = RET
 				default:
 					std::cout << "There is a bug in blockdeal--factor, switch-ident" << std::endl;
 					return "0";
 				}
 			}
-			else {	//±êÊ¶·ûÎ´¶¨Òå
+			else {	//æ ‡è¯†ç¬¦æœªå®šä¹‰
 				return "0";
 			}
-			//³ÌĞò²»¿ÉÄÜÔËĞĞµ½ÕâÀï
+			//ç¨‹åºä¸å¯èƒ½è¿è¡Œåˆ°è¿™é‡Œ
 			std::cout << "There is a bug in blockdeal-factor, switch-ident" << std::endl;
-		case plus:	// ÕûÊı: +
+		case plus:	// æ•´æ•°: +
 			insymbol();
 			if ((sy == intcon) && (intcon != 0)) {
 				return int_to_string(inum);
@@ -333,9 +333,9 @@ namespace compiler{
 				skip(factor_end_sys, 5);
 				return "0";
 			}
-			//³ÌĞò²»¿ÉÄÜÔËĞĞµ½ÕâÀï
+			//ç¨‹åºä¸å¯èƒ½è¿è¡Œåˆ°è¿™é‡Œ
 			std::cout << "There is a bug in blockdeal-factor, switch-plus" << std::endl;
-		case minus:	// ÕûÊı: -
+		case minus:	// æ•´æ•°: -
 			tmp = -1;
 			insymbol();
 			if ((sy == intcon) && (intcon != 0)) {
@@ -347,12 +347,12 @@ namespace compiler{
 				skip(factor_end_sys, 5);
 				return "0";
 			}
-			//³ÌĞò²»¿ÉÄÜÔËĞĞµ½ÕâÀï
+			//ç¨‹åºä¸å¯èƒ½è¿è¡Œåˆ°è¿™é‡Œ
 			std::cout << "There is a bug in blockdeal-factor, switch-minus" << std::endl;
-		case intcon: // ÕûÊı: 0 »òÕßÎŞ·ûºÅÕûÊı
+		case intcon: // æ•´æ•°: 0 æˆ–è€…æ— ç¬¦å·æ•´æ•°
 			is_char = false;
 			return int_to_string(inum);
-		case charcon:	//×Ö·û
+		case charcon:	//å­—ç¬¦
 			is_char = true;
 			return int_to_string(inum);
 		case lparent:
@@ -367,30 +367,30 @@ namespace compiler{
 			break;
 		}
 
-		//³ÌĞò²»¿ÉÄÜÔËĞĞµ½ÕâÀï
+		//ç¨‹åºä¸å¯èƒ½è¿è¡Œåˆ°è¿™é‡Œ
 		std::cout << "There is a bug in blockdeal-factor, end" << std::endl;
 		return " ";
-		//³öÒò×ÓÊ±,syÎª factor_end_sys[]ÖĞµÄÔªËØ
+		//å‡ºå› å­æ—¶,syä¸º factor_end_sys[]ä¸­çš„å…ƒç´ 
 	}
 
 
-	//<Ïî>
-	//·µ»ØÖµÎªÏî´¦ÀíµÃµ½µÄ×îÖÕµÄz²Ù×÷Êı
+	//<é¡¹>
+	//è¿”å›å€¼ä¸ºé¡¹å¤„ç†å¾—åˆ°çš„æœ€ç»ˆçš„zæ“ä½œæ•°
 	std::string item(int minus_flag, bool& is_char){
-		//½øÈëÊ±syÎªfactor_start_sys[]ÖĞµÄÔªËØ
+		//è¿›å…¥æ—¶syä¸ºfactor_start_sys[]ä¸­çš„å…ƒç´ 
 		std::string z, x, y;
 		x = factor(is_char);
-		if (minus_flag == 1) {		//±í´ïÊ½µÄµÚÒ»¸öÏî²Å»áÓöµ½
-			z = creat_tmp_var();//²úÉúÁÙÊ±±äÁ¿
+		if (minus_flag == 1) {		//è¡¨è¾¾å¼çš„ç¬¬ä¸€ä¸ªé¡¹æ‰ä¼šé‡åˆ°
+			z = creat_tmp_var();//äº§ç”Ÿä¸´æ—¶å˜é‡
 			y = x;
 			x = "0";
 			enterMidCode(1, z, x, y, 0);
 			x = z;
 		}
-		//Àë¿ªfactorÊ±, syÎªfactor_end_sys[]ÖĞµÄÒ»¸ö
+		//ç¦»å¼€factoræ—¶, syä¸ºfactor_end_sys[]ä¸­çš„ä¸€ä¸ª
 		insymbol();
 		while ((sy == mult) || (sy == rdiv)) {
-			is_char = false;		// ÓĞ³Ë·¨ÔËËã·û,¿Ï¶¨²»ÊÇ×Ö·ûÀàĞÍÁË
+			is_char = false;		// æœ‰ä¹˜æ³•è¿ç®—ç¬¦,è‚¯å®šä¸æ˜¯å­—ç¬¦ç±»å‹äº†
 			int op;
 			bool no_use;
 			if (sy == mult) op = 2;
@@ -399,7 +399,7 @@ namespace compiler{
 			insymbol();
 			skip(factor_start_sys, 6);
 			y = factor(no_use);
-			z = creat_tmp_var();//²úÉúÁÙÊ±±äÁ¿
+			z = creat_tmp_var();//äº§ç”Ÿä¸´æ—¶å˜é‡
 			if ((op == 3) && string_is_num(y) && (string_to_int(y) == 0)) {
 				error(44, lc);
 			}
@@ -409,14 +409,14 @@ namespace compiler{
 			insymbol();
 		}
 		return x;
-		//½áÊøÊ± sy ÎªÏîºóÃæÒ»¸öµ¥´Ê
+		//ç»“æŸæ—¶ sy ä¸ºé¡¹åé¢ä¸€ä¸ªå•è¯
 	}
 
 	
-	//<±í´ïÊ½>			
-	//·µ»ØÖµÎª×îÖÕµÄÒ»¸öËÄÔªÊ½±í´ïÊ½µÄzÖµ, ´«²Î: ±í´ïÊ½´¦ÀíÍêÊÇ·ñÎªcharÀàĞÍ
+	//<è¡¨è¾¾å¼>			
+	//è¿”å›å€¼ä¸ºæœ€ç»ˆçš„ä¸€ä¸ªå››å…ƒå¼è¡¨è¾¾å¼çš„zå€¼, ä¼ å‚: è¡¨è¾¾å¼å¤„ç†å®Œæ˜¯å¦ä¸ºcharç±»å‹
 	std::string expression(bool& is_char){
-		//½øÈë±í´ïÊ½Ê±syÎªexpression_start_sys[]ÖĞµÄÔªËØ
+		//è¿›å…¥è¡¨è¾¾å¼æ—¶syä¸ºexpression_start_sys[]ä¸­çš„å…ƒç´ 
 
 		//std::cout << "This is an expression statement" << std::endl;
 		gram_out_file << "This is an expression statement" << std::endl;
@@ -431,17 +431,17 @@ namespace compiler{
 		}
 
 		skip(factor_start_sys, 6);
-		x = item(minus_flag, is_char);//½øÈëÏî´¦Àí
+		x = item(minus_flag, is_char);//è¿›å…¥é¡¹å¤„ç†
 
-		//³öÀ´Ê±syÎª ÏîºóÃæµÄµÚÒ»¸öµ¥´Ê
-		symbol tmp_sys[] = { semicolon, rparent, rsbrack ,plus, minus, lss, leq, gtr, geq, neq, eql, comma};	//´ËÊ± syÓ¦¸ÃÎª follow[expression] or ¼Ó·¨ÔËËã·û
+		//å‡ºæ¥æ—¶syä¸º é¡¹åé¢çš„ç¬¬ä¸€ä¸ªå•è¯
+		symbol tmp_sys[] = { semicolon, rparent, rsbrack ,plus, minus, lss, leq, gtr, geq, neq, eql, comma};	//æ­¤æ—¶ syåº”è¯¥ä¸º follow[expression] or åŠ æ³•è¿ç®—ç¬¦
 		if (!find_sy(tmp_sys, 12)) {
 			error(33, lc);
 			//std::cout<<"1"<<std::endl;
 			skip(tmp_sys, 11);
 		}
 		while ((sy == plus) || (sy == minus)) {
-			is_char = false;	// ÓĞ¼Ó·¨ÔËËã·ûÔò¿Ï¶¨²»ÊÇ×Ö·ûĞÍ
+			is_char = false;	// æœ‰åŠ æ³•è¿ç®—ç¬¦åˆ™è‚¯å®šä¸æ˜¯å­—ç¬¦å‹
 			int op;
 			bool no_use;
 			if (sy == plus) op = 0;
@@ -449,8 +449,8 @@ namespace compiler{
 			else std::cout << "There is a bug in blockdeal--expression, while" << std::endl;
 			insymbol();
 			y = item(0,no_use);
-			//syÎªÏîºóÃæµÄÒ»¸öµ¥´Ê,ËùÒÔ²»ÓÃinsymbol()
-			z = creat_tmp_var();//²úÉúÁÙÊ±±äÁ¿
+			//syä¸ºé¡¹åé¢çš„ä¸€ä¸ªå•è¯,æ‰€ä»¥ä¸ç”¨insymbol()
+			z = creat_tmp_var();//äº§ç”Ÿä¸´æ—¶å˜é‡
 
 			enterMidCode(op, z, x, y, 0);
 			x = z;
@@ -462,14 +462,14 @@ namespace compiler{
 		
 		
 		return x;
-		//³öexpressionÊ±,syÎªfollow_expression_sys[]ÖĞµÄÔªËØ
+		//å‡ºexpressionæ—¶,syä¸ºfollow_expression_sys[]ä¸­çš„å…ƒç´ 
 	}
 
 
-	//<²ÎÊı±í>
-	// ´«ÈëÖµÎª²ÎÊıµÄ¸öÊıÒıÓÃ¡¢pv_addrÎªÄ¿Ç°±äÁ¿´¦ÓÚº¯ÊıÊı¾İÇøµÄÏà¶ÔµØÖ·,·µ»ØÖµÎª×îºóÒ»¸ö²ÎÊıÔÚtab±íµÄµÇÂ¼Î»ÖÃ
+	//<å‚æ•°è¡¨>
+	// ä¼ å…¥å€¼ä¸ºå‚æ•°çš„ä¸ªæ•°å¼•ç”¨ã€pv_addrä¸ºç›®å‰å˜é‡å¤„äºå‡½æ•°æ•°æ®åŒºçš„ç›¸å¯¹åœ°å€,è¿”å›å€¼ä¸ºæœ€åä¸€ä¸ªå‚æ•°åœ¨tabè¡¨çš„ç™»å½•ä½ç½®
 	int paraDeal(int& para_num, int& pv_addr) {
-		//½øÈëÊ±sy == intsy || sy == charsy
+		//è¿›å…¥æ—¶sy == intsy || sy == charsy
 		if ((sy != intsy) && (sy != charsy)) {
 			std::cout << "There is a bug in blockdeal--paraDeal, sy must be intsy or charsy" << std::endl;
 		}
@@ -499,12 +499,12 @@ namespace compiler{
 			}
 			tmp_typ = sy_to_types(sy);
 			insymbol();
-			if (sy != ident) {	//Èç¹û²»ÊÇ±êÊ¶·ûÔòÌø¶Á
+			if (sy != ident) {	//å¦‚æœä¸æ˜¯æ ‡è¯†ç¬¦åˆ™è·³è¯»
 				error(31, lc);
 				skip(tmp_sys, 2);
 				continue;
 			}
-			//µ½´ï´Ë´¦sy == ident
+			//åˆ°è¾¾æ­¤å¤„sy == ident
 			enter(id, variable, tmp_typ);
 			enterVar(tab.t - 1, pv_addr++);
 			para_num++;
@@ -516,40 +516,40 @@ namespace compiler{
 			}
 		}
 
-		//µ½´ï´Ë´¦µÄÌõ¼şÊÇsy == rparent
+		//åˆ°è¾¾æ­¤å¤„çš„æ¡ä»¶æ˜¯sy == rparent
 		if (sy != rparent) {
 			std::cout << "There is a bug in blockdeal--paraDeal, sy must be rparent" << std::endl;
 		}
 		insymbol();
-		//³öÈ¥µÄÊ±ºòsyÎª')'ºóÃæÒ»¸öµ¥´Ê
+		//å‡ºå»çš„æ—¶å€™syä¸º')'åé¢ä¸€ä¸ªå•è¯
 		return tab.t - 1;
 	}
 
 
-	//<Ìõ¼ş>
-	//·µ»Ø¸ÃÌø×ªÖ¸ÁîËùÔÚµÄÖĞ¼ä´úÂëÖĞµÄÎ»ÖÃ,ÒÔ±ãºóĞø»ØÌîÌø×ªµÄ±êÇ©
-	int conditionDeal(int kind){			// kind = 0, if Ìõ¼şµÄµ÷ÓÃ; kind = 1, whileÌõ¼şµÄµ÷ÓÃ, Á½ÕßÌø×ªµÄÌõ¼ş²»Í¬
-		// ½øÈëÊ±, syÎª×óÀ¨ºÅºóµÄµÚÒ»¸öµ¥´Ê
+	//<æ¡ä»¶>
+	//è¿”å›è¯¥è·³è½¬æŒ‡ä»¤æ‰€åœ¨çš„ä¸­é—´ä»£ç ä¸­çš„ä½ç½®,ä»¥ä¾¿åç»­å›å¡«è·³è½¬çš„æ ‡ç­¾
+	int conditionDeal(int kind){			// kind = 0, if æ¡ä»¶çš„è°ƒç”¨; kind = 1, whileæ¡ä»¶çš„è°ƒç”¨, ä¸¤è€…è·³è½¬çš„æ¡ä»¶ä¸åŒ
+		// è¿›å…¥æ—¶, syä¸ºå·¦æ‹¬å·åçš„ç¬¬ä¸€ä¸ªå•è¯
 		//std::cout << "This is a condition statement" << std::endl;
 		gram_out_file << "This is a condition statement" << std::endl;
 		std::string z, x, y;
-		int op, op_flag = 0;	//op_flag = 1±íÊ¾ĞèÒªÔÚÌø×ªÖ®Ç°½øĞĞx-y²Ù×÷£¬½ø¶ø±È½Ïx-yÓë0µÄ´óĞ¡¹ØÏµ
+		int op, op_flag = 0;	//op_flag = 1è¡¨ç¤ºéœ€è¦åœ¨è·³è½¬ä¹‹å‰è¿›è¡Œx-yæ“ä½œï¼Œè¿›è€Œæ¯”è¾ƒx-yä¸0çš„å¤§å°å…³ç³»
 		bool no_use;
-		symbol relation_op_sys[] = { lss, leq, gtr, geq, neq, eql };	//6¸ö
+		symbol relation_op_sys[] = { lss, leq, gtr, geq, neq, eql };	//6ä¸ª
 
 		if (!find_sy(expression_start_sys, 6)) {
 			error(33, lc);
 			skip(expression_start_sys, 6);
 		}
 
-		x = expression(no_use);	//½øÈë±í´ïÊ½´¦Àí
-		//³öexpressionÊ±,syÎªfollow_expression_sys[]ÖĞµÄÔªËØ
+		x = expression(no_use);	//è¿›å…¥è¡¨è¾¾å¼å¤„ç†
+		//å‡ºexpressionæ—¶,syä¸ºfollow_expression_sys[]ä¸­çš„å…ƒç´ 
 
 		if (find_sy(relation_op_sys, 6)) {
 			if (kind == 0) {
-				//ÓĞ¹ØÏµÔËËã·û,×¢ÒâopµÄÈ¡Öµ, ifÊÇ²»·ûºÏÌõ¼ş²ÅÌø×ª
+				//æœ‰å…³ç³»è¿ç®—ç¬¦,æ³¨æ„opçš„å–å€¼, ifæ˜¯ä¸ç¬¦åˆæ¡ä»¶æ‰è·³è½¬
 				switch (sy) {
-				case lss://<  ÒâÎ¶×Åx >= yµÄÊ±ºò²»Ö´ĞĞifÄÚµÄÓï¾ä,½øĞĞÌø×ª
+				case lss://<  æ„å‘³ç€x >= yçš„æ—¶å€™ä¸æ‰§è¡Œifå†…çš„è¯­å¥,è¿›è¡Œè·³è½¬
 					op = 8;
 					break;
 				case leq://<=  x > y
@@ -561,7 +561,7 @@ namespace compiler{
 				case geq://>=  x<y
 					op = 11;
 					break;
-				case neq://!=  x==y Ìø×ª
+				case neq://!=  x==y è·³è½¬
 					op = 6;
 					break;
 				case eql://==  x!=y
@@ -572,7 +572,7 @@ namespace compiler{
 					break;
 				}
 			}
-			else {				//while ·ûºÏÌõ¼şÔòÌø×ª
+			else {				//while ç¬¦åˆæ¡ä»¶åˆ™è·³è½¬
 				switch (sy) {
 				case lss://<  
 					op = 11;
@@ -599,33 +599,36 @@ namespace compiler{
 			}
 			insymbol();
 			skip(expression_start_sys, 6);
-			y = expression(no_use);	//½øÈë±í´ïÊ½´¦Àí
+			y = expression(no_use);	//è¿›å…¥è¡¨è¾¾å¼å¤„ç†
 		}
 		else {
-			if(kind == 0) op = 10; //µ¥¶ÀÒ»¸ö±í´ïÊ½, if, ÔòÔÚ x <= 0µÄÊ±ºòÌø×ª
-			else op = 9;
+			//if(kind == 0) op = 10; //å•ç‹¬ä¸€ä¸ªè¡¨è¾¾å¼, if, åˆ™åœ¨ x <= 0çš„æ—¶å€™è·³è½¬
+			//else op = 9;
+			
+			if(kind == 0) op = 6; //å•ç‹¬ä¸€ä¸ªè¡¨è¾¾å¼, if, åˆ™åœ¨ x == 0çš„æ—¶å€™è·³è½¬(æ¡ä»¶ä¸ºfalse)
+			else op = 7;
 			y = "0";
 		}
 		if (op_flag = 1) {
 			//z = creat_tmp_var();
-			//enterMidCode(1, z, x, y, 0);					//Ö´ĞĞ z = x-y²Ù×÷
+			//enterMidCode(1, z, x, y, 0);					//æ‰§è¡Œ z = x-yæ“ä½œ
 			enterMidCode(op, " ", x, y, 0);
 		}
-		else {		// == »ò !=
+		else {		// == æˆ– !=
 			enterMidCode(op, " ", x, y, 0);
 		}
 		
-		//´ËÊ±syÊôÓÚfollow_expression_sys[]ÖĞµÄÔªËØ
+		//æ­¤æ—¶syå±äºfollow_expression_sys[]ä¸­çš„å…ƒç´ 
 		if (sy != rparent) {
 			error(50, lc);
 		}
-		return MidCodeT.mdc - 1; //·µ»ØÌø×ªÖ¸ÁîËùÔÚµÄÎ»ÖÃ,±ãÓÚÖ®ºó»ØÌî
-		// ³öÈ¥Ê±, sy == rparent
+		return MidCodeT.mdc - 1; //è¿”å›è·³è½¬æŒ‡ä»¤æ‰€åœ¨çš„ä½ç½®,ä¾¿äºä¹‹åå›å¡«
+		// å‡ºå»æ—¶, sy == rparent
 	}
 
-	//<Ìõ¼şÓï¾ä>
+	//<æ¡ä»¶è¯­å¥>
 	void ifStatement(){
-		//½øÈëÊ± sy == ifsy
+		//è¿›å…¥æ—¶ sy == ifsy
 		//std::cout<<"This is a if statement"<<std::endl;
 		gram_out_file<< "This is a if statement" << std::endl;
 		int code_pos = 0;
@@ -639,12 +642,12 @@ namespace compiler{
 		}
 		insymbol();
 		if (sy == rparent) {
-			//ËµÃ÷Ã»ÓĞÌõ¼şÓï¾ä
+			//è¯´æ˜æ²¡æœ‰æ¡ä»¶è¯­å¥
 			error(21, lc);
 		}
 		else {
 			code_pos = conditionDeal(0);
-			//³öÀ´Ê± sy == rparent
+			//å‡ºæ¥æ—¶ sy == rparent
 		}
 
 		if (sy != rparent) std::cout << "There is a bug in blockdeal--ifStatement, sy must be rparent" << std::endl;
@@ -659,18 +662,18 @@ namespace compiler{
 		statement();
 
 		j_label = creat_label(" ", 2, MidCodeT.mdc);
-		enterMidCode(13, " ", " ",j_label, 1);//ÉèÖÃ±êÇ©
+		enterMidCode(13, " ", " ",j_label, 1);//è®¾ç½®æ ‡ç­¾
 		MidCodeT.midcodeArray[code_pos].z = j_label;
-		//³öÈ¥Ê± sy Îª statement_end_sysÖĞµÄÔªËØ
+		//å‡ºå»æ—¶ sy ä¸º statement_end_sysä¸­çš„å…ƒç´ 
 	}
 
-	//<Ñ­»·Óï¾ä>
+	//<å¾ªç¯è¯­å¥>
 	void do_whileStatement(){
-		//½øÈëÊ± sy == dosy
+		//è¿›å…¥æ—¶ sy == dosy
 		//std::cout << "This is a do_while statement" << std::endl;
 		gram_out_file << "This is do_while statement" << std::endl;
 		std::string j_label;
-		int j_pos; //Ìø×ªÖ¸ÁîµÄÎ»ÖÃ
+		int j_pos; //è·³è½¬æŒ‡ä»¤çš„ä½ç½®
 		insymbol();
 
 		if (!find_sy(statement_start_sys, 9)) {
@@ -678,7 +681,7 @@ namespace compiler{
 			skip(statement_start_sys, 9);
 		}
 
-		//do-while Ö¸ÁîÌõ¼şÔÚºóÃæ, Ìøµ½Ç°Ãæ
+		//do-while æŒ‡ä»¤æ¡ä»¶åœ¨åé¢, è·³åˆ°å‰é¢
 		j_label = creat_label(" ", 2, MidCodeT.mdc);
 		enterMidCode(13, " ", " ", j_label, 1);
 
@@ -705,21 +708,21 @@ namespace compiler{
 			error(21, lc - 1);
 			return;
 		}
-		//½øÈëÌõ¼ş´¦ÀíÓï¾ä
+		//è¿›å…¥æ¡ä»¶å¤„ç†è¯­å¥
 		j_pos = conditionDeal(1);
 		MidCodeT.midcodeArray[j_pos].z = j_label;
 		if (sy != rparent) std::cout << "There is a bug in blockdeal--do_while, sy must be rparent" << std::endl;
-		//³öÈ¥Ê± sy == rparent
+		//å‡ºå»æ—¶ sy == rparent
 	}
 
-	//<ÓĞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä>
-	//Éæ¼°µÄËÄÔªÊ½Ö¸Áî  call, push, jal,  set call_label,  z = RET, 
-	//·µ»ØÖµÎª z = RET µÄz
+	//<æœ‰è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥>
+	//æ¶‰åŠçš„å››å…ƒå¼æŒ‡ä»¤  call, push, jal,  set call_label,  z = RET, 
+	//è¿”å›å€¼ä¸º z = RET çš„z
 	std::string reUseFuncStatement(){
-		//½øÈëÊ± sy == ident(º¯ÊıÃû)
+		//è¿›å…¥æ—¶ sy == ident(å‡½æ•°å)
 		//std::cout << "This is a reUseFuncStatement" << std::endl;
 		gram_out_file << "This is a reUseFuncStatement" << std::endl;
-		int id_pos = find_in_tab(id);	//id_posÎª¸Ãº¯ÊıÃûÔÚtab±íÖĞµÄÎ»ÖÃ
+		int id_pos = find_in_tab(id);	//id_posä¸ºè¯¥å‡½æ•°ååœ¨tabè¡¨ä¸­çš„ä½ç½®
 		if(id_pos == 0) error(23, lc);
 		int paranum = btab.btabArray[tab.tabArray[id_pos].ref].paranum;
 		int paracount = 0;
@@ -734,7 +737,7 @@ namespace compiler{
 			tmp = tab.tabArray[tmp.link];
 		}
 
-		enterMidCode(19," ", " ", func_name,0);	//callÖ¸Áîµ÷ÓÃ
+		enterMidCode(19," ", " ", func_name,0);	//callæŒ‡ä»¤è°ƒç”¨
 		insymbol();
 
 		if (sy != lparent) {
@@ -743,7 +746,7 @@ namespace compiler{
 			return " ";
 		}
 		insymbol();
-		if (sy == rparent) { //ÎŞ²ÎÊıµ÷ÓÃµÄÇé¿ö
+		if (sy == rparent) { //æ— å‚æ•°è°ƒç”¨çš„æƒ…å†µ
 			if (paracount != paranum) {
 				error(36, lc);
 				return " ";
@@ -763,7 +766,7 @@ namespace compiler{
 				}
 			}
 
-			enterMidCode(18, " ", " ", para, 0);	//pushÖ¸Áî
+			enterMidCode(18, " ", " ", para, 0);	//pushæŒ‡ä»¤
 			paracount++;
 			while (sy == comma) {
 				insymbol();
@@ -783,7 +786,7 @@ namespace compiler{
 						error(45, lc);
 					}
 				}
-				enterMidCode(18, " ", " ", para, 0);	//pushÖ¸Áî
+				enterMidCode(18, " ", " ", para, 0);	//pushæŒ‡ä»¤
 				paracount++;		
 			}
 			if (paracount != paranum) {
@@ -803,24 +806,24 @@ namespace compiler{
 		}
 		
 		if (sy != rparent) std::cout << "There is a bug in blockdeal--reUseFuncStatement, sy must be rparent" << std::endl;
-		enterMidCode(21,func_name + "_begin_"," "," ", 0);		//jalÓï¾ä
+		enterMidCode(21,func_name + "_begin_"," "," ", 0);		//jalè¯­å¥
 		z = creat_tmp_var();
 		
 		enterMidCode(13," "," ",creat_label(" ",4,MidCodeT.mdc),3);
 
-		//ÓĞ·µ»ØÖµµ÷ÓÃº¯Êı²ÅÓĞ
+		//æœ‰è¿”å›å€¼è°ƒç”¨å‡½æ•°æ‰æœ‰
 		enterMidCode(4,z, " ", "RET",0);				//z = RET
-		//³öÈ¥Ê±sy == rparent
+		//å‡ºå»æ—¶sy == rparent
 		return z;
 	}
 
-	//<ÎŞ·µ»ØÖµº¯Êıµ÷ÓÃÓï¾ä>
-	//Éæ¼°µÄËÄÔªÊ½Ö¸Áî  call, push, jal, set call_label
+	//<æ— è¿”å›å€¼å‡½æ•°è°ƒç”¨è¯­å¥>
+	//æ¶‰åŠçš„å››å…ƒå¼æŒ‡ä»¤  call, push, jal, set call_label
 	void voUseFuncStatement(){
-		//½øÈëÊ± sy == ident(º¯ÊıÃû)
+		//è¿›å…¥æ—¶ sy == ident(å‡½æ•°å)
 		//std::cout << "This is a voUseFuncStatement" << std::endl;
 		gram_out_file << "This is a voUseFuncStatement" << std::endl;
-		int id_pos = find_in_tab(id);	//id_posÎª¸Ãº¯ÊıÃûÔÚtab±íÖĞµÄÎ»ÖÃ
+		int id_pos = find_in_tab(id);	//id_posä¸ºè¯¥å‡½æ•°ååœ¨tabè¡¨ä¸­çš„ä½ç½®
 		if (id_pos == 0) error(23, lc);
 		int paranum = btab.btabArray[tab.tabArray[id_pos].ref].paranum;
 		int paracount = 0;
@@ -835,7 +838,7 @@ namespace compiler{
 			tmp = tab.tabArray[tmp.link];
 		}
 
-		enterMidCode(19, " ", " ", func_name, 0);	//callÖ¸Áîµ÷ÓÃ
+		enterMidCode(19, " ", " ", func_name, 0);	//callæŒ‡ä»¤è°ƒç”¨
 		insymbol();
 
 		if (sy != lparent) {
@@ -844,7 +847,7 @@ namespace compiler{
 			return;
 		}
 		insymbol();
-		if (sy == rparent) { //ÎŞ²ÎÊıµ÷ÓÃµÄÇé¿ö
+		if (sy == rparent) { //æ— å‚æ•°è°ƒç”¨çš„æƒ…å†µ
 			if (paracount != paranum) {
 				error(36, lc);
 				return;
@@ -865,7 +868,7 @@ namespace compiler{
 					error(45, lc);
 				}
 			}
-			enterMidCode(18, " ", " ", para, 0);	//pushÖ¸Áî
+			enterMidCode(18, " ", " ", para, 0);	//pushæŒ‡ä»¤
 			paracount++;
 			while (sy == comma) {
 				insymbol();
@@ -885,7 +888,7 @@ namespace compiler{
 						error(45, lc);
 					}
 				}
-				enterMidCode(18, " ", " ", para, 0);	//pushÖ¸Áî
+				enterMidCode(18, " ", " ", para, 0);	//pushæŒ‡ä»¤
 				paracount++;
 			}
 			if (paracount != paranum) {
@@ -905,23 +908,23 @@ namespace compiler{
 		}
 
 		if (sy != rparent) std::cout << "There is a bug in blockdeal--reUseFuncStatement, sy must be rparent" << std::endl;
-		enterMidCode(21, func_name + "_begin_", " ", " ", 0);		//jalÓï¾ä
+		enterMidCode(21, func_name + "_begin_", " ", " ", 0);		//jalè¯­å¥
 
 		enterMidCode(13, " ", " ", creat_label(" ", 4, MidCodeT.mdc), 3);
-		//³öÈ¥Ê±sy == rparent
+		//å‡ºå»æ—¶sy == rparent
 	}
 
-	//<¸³ÖµÓï¾ä>
-	//array_flag = 1, ±íÊ¾µ±Ç°ident´ú±íÊı×é; 0´ú±íÎª±äÁ¿
+	//<èµ‹å€¼è¯­å¥>
+	//array_flag = 1, è¡¨ç¤ºå½“å‰identä»£è¡¨æ•°ç»„; 0ä»£è¡¨ä¸ºå˜é‡
 	void assignStatement(int array_flag){
-		//½øÈëÊ±sy == ident
+		//è¿›å…¥æ—¶sy == ident
 		//std::cout << "This is a assign statement" << std::endl;
 		gram_out_file << "This is a assign statement" << std::endl;
 		std::string z, y, x = " ";
 		symbol tmp_sys[] = { semicolon };
 		int op;
 		bool is_char = false;
-		int z_pos;		//zÔÚ·ûºÅ±íÖĞµÄÎ»ÖÃ
+		int z_pos;		//zåœ¨ç¬¦å·è¡¨ä¸­çš„ä½ç½®
 		z = id;
 		z_pos = find_in_tab(z);
 		if (z_pos == 0) error(23, lc);
@@ -936,8 +939,8 @@ namespace compiler{
 			insymbol();
 			skip(expression_start_sys, 6);
 			bool no_use = false;
-			x = expression(no_use);	//´¦ÀíÖĞÀ¨ºÅµÄ±í´ïÊ½,³öÀ´Ê±syÎªfollow_expression_sys[]ÖĞµÄÔªËØ
-			if (no_use) {	//tmpÎª±íÊ¾Îª×Ö·ûÀàĞÍ
+			x = expression(no_use);	//å¤„ç†ä¸­æ‹¬å·çš„è¡¨è¾¾å¼,å‡ºæ¥æ—¶syä¸ºfollow_expression_sys[]ä¸­çš„å…ƒç´ 
+			if (no_use) {	//tmpä¸ºè¡¨ç¤ºä¸ºå­—ç¬¦ç±»å‹
 				//std::cout << "1" << std::endl;
 				error(49, lc);
 			}
@@ -982,12 +985,12 @@ namespace compiler{
 			skip(tmp_sys, 1);
 		}
 		
-		//½áÊøÊ± sy = semicolon
+		//ç»“æŸæ—¶ sy = semicolon
 	}
 
-	//<¶ÁÓï¾ä>
+	//<è¯»è¯­å¥>
 	void scanfStatement(){
-		//½øÈëÊ± sy == scanfsy
+		//è¿›å…¥æ—¶ sy == scanfsy
 		//std::cout << "This is a scanf statement" << std::endl;
 		gram_out_file << "This is scanf statement" << std::endl;
 		symbol tmp_sys[] = { semicolon };
@@ -1020,12 +1023,12 @@ namespace compiler{
 			error(19, lc);
 			skip(tmp_sys, 1);
 		}
-		//³öÀ´Ê± sy == semicolon
+		//å‡ºæ¥æ—¶ sy == semicolon
 	}
 
-	//<Ğ´Óï¾ä>
+	//<å†™è¯­å¥>
 	void printfStatement(){
-		//½øÈëÊ± sy == printfsy
+		//è¿›å…¥æ—¶ sy == printfsy
 		//std::cout << "This is a printf statement" << std::endl;
 		gram_out_file << "This is printf statement" << std::endl;
 		std::string z = " ", x = " ", y = " ";
@@ -1057,7 +1060,7 @@ namespace compiler{
 						return;
 					}
 					enterMidCode(17, z, x, y, 0);
-					insymbol(); //¶ÁºóÃæµÄ·ÖºÅ
+					insymbol(); //è¯»åé¢çš„åˆ†å·
 					if (sy != semicolon) {
 						error(19, lc);
 						skip(tmp_sys, 1);
@@ -1105,14 +1108,14 @@ namespace compiler{
 			skip(tmp_sys, 1);
 			return;
 		}
-		//³öÈ¥Ê± sy == semicolon
+		//å‡ºå»æ—¶ sy == semicolon
 	}
 
 
-	//<Çé¿ö±í>
-	//²ÎÊıxÎªswitchÖĞµÄ±í´ïÊ½,switch_end_labelÎªswitch½áÊøµÄÎ»ÖÃ±êÇ©,ÓÃÓÚÃ¿Ò»¸öcaseºóÃæµÄbreak
+	//<æƒ…å†µè¡¨>
+	//å‚æ•°xä¸ºswitchä¸­çš„è¡¨è¾¾å¼,switch_end_labelä¸ºswitchç»“æŸçš„ä½ç½®æ ‡ç­¾,ç”¨äºæ¯ä¸€ä¸ªcaseåé¢çš„break
 	void caseTableDeal(std::string x, std::string switch_end_label, bool is_char){
-		//½øÈëÊ±sy == lcbrack
+		//è¿›å…¥æ—¶sy == lcbrack
 		//std::cout << "This is case-table statement" << std::endl;
 		gram_out_file << "This is case-table statement" << std::endl;
 		std::string z, y, j_label;
@@ -1177,7 +1180,7 @@ namespace compiler{
 			}
 			
 			pos = MidCodeT.mdc;
-			enterMidCode(7, " ", x, y, 0);	//µÈÓÚµÄÊ±ºò¼ÌĞøÖ´ĞĞ,²»µÈÓÚµÄÊ±ºòÌø×ª,ËùÒÔ´Ë´¦µÄÌø×ªÖ¸ÁîÓ¦¸ÃÎª²»µÈºÅ
+			enterMidCode(7, " ", x, y, 0);	//ç­‰äºçš„æ—¶å€™ç»§ç»­æ‰§è¡Œ,ä¸ç­‰äºçš„æ—¶å€™è·³è½¬,æ‰€ä»¥æ­¤å¤„çš„è·³è½¬æŒ‡ä»¤åº”è¯¥ä¸ºä¸ç­‰å·
 
 			insymbol();
 			if (!find_sy(statement_start_sys, 9)) {
@@ -1186,14 +1189,14 @@ namespace compiler{
 			}
 			statement();
 			
-			//caseÓï¾ä´¦ÀíÍê,Ìø×ªµ½switch½áÊøÎ»ÖÃ
+			//caseè¯­å¥å¤„ç†å®Œ,è·³è½¬åˆ°switchç»“æŸä½ç½®
 			enterMidCode(5, switch_end_label, " ", " ", 0);
 			j_label = creat_label(" ", 2, MidCodeT.mdc);
 			enterMidCode(13, " ", " ", j_label, 1);
-			//Ìø×ªÖ¸Áî»ØÌî,Ìøµ½case½áÊøµÄÎ»ÖÃ,¼´gotoÓï¾äµÄºóÃæ
-			MidCodeT.midcodeArray[pos].z = j_label;		//´Ë´¦µÄj_label Îªpc-1,ÒòÎªÔÚÇ°ÃæÓÖÌîÁËÒ»¸ögotoÓï¾ä
+			//è·³è½¬æŒ‡ä»¤å›å¡«,è·³åˆ°caseç»“æŸçš„ä½ç½®,å³gotoè¯­å¥çš„åé¢
+			MidCodeT.midcodeArray[pos].z = j_label;		//æ­¤å¤„çš„j_label ä¸ºpc-1,å› ä¸ºåœ¨å‰é¢åˆå¡«äº†ä¸€ä¸ªgotoè¯­å¥
 
-			//´Ë´¦syÎªstatement_end_sysÖĞµÄÒ»¸ö
+			//æ­¤å¤„syä¸ºstatement_end_sysä¸­çš„ä¸€ä¸ª
 			insymbol();
 		} while (sy == casesy);
 
@@ -1201,15 +1204,15 @@ namespace compiler{
 			error(43,lc);
 			skip(tmp_sys, 1);
 		}
-		//½áÊøÊ±sy == rcbrack
+		//ç»“æŸæ—¶sy == rcbrack
 	}
 
-	//<Çé¿öÓï¾ä>
+	//<æƒ…å†µè¯­å¥>
 	void switchStatement() {
-		//½øÈëÊ± sy == switchsy
+		//è¿›å…¥æ—¶ sy == switchsy
 		//std::cout << "This is a switch statement" << std::endl;
 		gram_out_file << "This is switch statement" << std::endl;
-		std::string z, x, y;	//x×÷Îªswitch()À¨ºÅÀïµÄ²Ù×÷Êı,y´ú±í¸÷¸öcaseµÄ²Ù×÷Êı
+		std::string z, x, y;	//xä½œä¸ºswitch()æ‹¬å·é‡Œçš„æ“ä½œæ•°,yä»£è¡¨å„ä¸ªcaseçš„æ“ä½œæ•°
 		std::string switch_end_label = creat_label(" ",3,MidCodeT.mdc);
 		symbol tmp_sys[] = { rcbrack };
 		bool is_char = false;
@@ -1226,7 +1229,7 @@ namespace compiler{
 			return;
 		}
 		x = expression(is_char);
-		//³öexpressionÊ± syÎªfollow(expression)ÀïÃæµÄ¶«Î÷
+		//å‡ºexpressionæ—¶ syä¸ºfollow(expression)é‡Œé¢çš„ä¸œè¥¿
 		if (sy != rparent) {
 			error(14, lc);
 			skip(tmp_sys, 1);
@@ -1239,16 +1242,16 @@ namespace compiler{
 			return;
 		}
 		caseTableDeal(x, switch_end_label, is_char);
-		//³öcaseTableDealÊ±sy == rcbrack
+		//å‡ºcaseTableDealæ—¶sy == rcbrack
 		
 		enterMidCode(13, " ", " ", switch_end_label, 1);
-		//³öÀ´Ê± sy Îªrcbrack
+		//å‡ºæ¥æ—¶ sy ä¸ºrcbrack
 	}
 
 
-	//<·µ»ØÓï¾ä>
+	//<è¿”å›è¯­å¥>
 	void returnStatement(){
-		//½øÈëÊ± sy == returnsy
+		//è¿›å…¥æ—¶ sy == returnsy
 		//std::cout << "This is a return statement" << std::endl;
 		gram_out_file << "This is return statement" << std::endl;
 		symbol tmp_sys[] = { semicolon };
@@ -1257,7 +1260,7 @@ namespace compiler{
 		bool is_char = false;
 		insymbol();
 		
-		if (sy == semicolon) {	//µ¥¶ÀÒ»¸öreturn
+		if (sy == semicolon) {	//å•ç‹¬ä¸€ä¸ªreturn
 			return_flag = 1;
 			enterMidCode(12," ", " "," ", 0);
 			
@@ -1271,9 +1274,9 @@ namespace compiler{
 				return;
 			}
 			y = expression(is_char);
-			//³öexpressionÊ±syÎªfollow_expression_sysÖĞµÄÔªËØ
-			if(is_char)return_flag = 3;	//·µ»ØÖµÎªchars
-			else return_flag = 2;	//·µ»ØÖµÎªints
+			//å‡ºexpressionæ—¶syä¸ºfollow_expression_sysä¸­çš„å…ƒç´ 
+			if(is_char)return_flag = 3;	//è¿”å›å€¼ä¸ºchars
+			else return_flag = 2;	//è¿”å›å€¼ä¸ºints
 			enterMidCode(12, " ", " ", y, 0);
 			
 			if (sy != rparent) {
@@ -1293,65 +1296,65 @@ namespace compiler{
 			skip(tmp_sys, 1);
 			return;
 		}
-		//³öÈ¥Ê± sy == semicolon
+		//å‡ºå»æ—¶ sy == semicolon
 	}
 
-	//<Óï¾ä>
+	//<è¯­å¥>
 	void statement() {
-		//½øÈëstatementÊ±, syÎªstatement_start_sysÖĞµÄÔªËØ
-		// µ÷ÓÃµØ·½: statement(),statementCompond, ifStatement, do_whileStatement, 
+		//è¿›å…¥statementæ—¶, syä¸ºstatement_start_sysä¸­çš„å…ƒç´ 
+		// è°ƒç”¨åœ°æ–¹: statement(),statementCompond, ifStatement, do_whileStatement, 
 		int pos;
 		std::string z, x, y;
 		switch (sy) {
-		case semicolon:	//µ¥¶ÀÒ»¸ö·ÖºÅ´¦Àí
+		case semicolon:	//å•ç‹¬ä¸€ä¸ªåˆ†å·å¤„ç†
 			//std::cout << "This is a single ; in statement" << std::endl;
 			break;
-		case ifsy:	//Ìõ¼şÓï¾ä´¦Àí
-			//½øÈëÊ±sy == if
+		case ifsy:	//æ¡ä»¶è¯­å¥å¤„ç†
+			//è¿›å…¥æ—¶sy == if
 			ifStatement();
-			break;//´ËÊ± sy Îªstatement_end_sysÖĞµÄÔªËØ
-		case dosy:	//Ñ­»·Óï¾ä
-			//½øÈëÊ±sy == dosy
+			break;//æ­¤æ—¶ sy ä¸ºstatement_end_sysä¸­çš„å…ƒç´ 
+		case dosy:	//å¾ªç¯è¯­å¥
+			//è¿›å…¥æ—¶sy == dosy
 			do_whileStatement();
-			break;//´ËÊ±sy == rparent
-		case lcbrack:	//{ Óï¾ä } ´¦Àí
+			break;//æ­¤æ—¶sy == rparent
+		case lcbrack:	//{ è¯­å¥ } å¤„ç†
 			insymbol();
 			while (sy != rcbrack) {
 				skip(statement_start_sys, 9);
-				//½øÈëstatementÊ±, syÎªstatement_start_sysÖĞµÄÔªËØ
-				statement();	//½øÈëÓï¾ä´¦Àíº¯Êı
-				//³östatementÊ±, sy Îª statement_end_sysÖĞµÄÔªËØ
-				insymbol();	//¶ÁÓï¾äºóÃæµÄÒ»¸öµ¥´Ê
+				//è¿›å…¥statementæ—¶, syä¸ºstatement_start_sysä¸­çš„å…ƒç´ 
+				statement();	//è¿›å…¥è¯­å¥å¤„ç†å‡½æ•°
+				//å‡ºstatementæ—¶, sy ä¸º statement_end_sysä¸­çš„å…ƒç´ 
+				insymbol();	//è¯»è¯­å¥åé¢çš„ä¸€ä¸ªå•è¯
 			}
-			break;	//´ËÊ±sy == rcbrack
-		case ident:		//ÓĞ·µ»ØÖµº¯Êıµ÷ÓÃ¡¢ÎŞ·µ»ØÖµº¯Êıµ÷ÓÃ¡¢¸³ÖµÓï¾ä´¦Àí
-			pos = find_in_tab(id);	//ÔÚtab±íÖĞ²éÑ¯µ±Ç°µ¥´ÊÊÇÉ¶
+			break;	//æ­¤æ—¶sy == rcbrack
+		case ident:		//æœ‰è¿”å›å€¼å‡½æ•°è°ƒç”¨ã€æ— è¿”å›å€¼å‡½æ•°è°ƒç”¨ã€èµ‹å€¼è¯­å¥å¤„ç†
+			pos = find_in_tab(id);	//åœ¨tabè¡¨ä¸­æŸ¥è¯¢å½“å‰å•è¯æ˜¯å•¥
 			if(pos == 0) error(23, lc);
 			if (pos != 0) {
 				switch (tab.tabArray[pos].obj) {
-				case constant:	//¸³ÖµÓï¾ä
+				case constant:	//èµ‹å€¼è¯­å¥
 					error(37, lc);
 					skip(statement_end_sys, 3);
 					break;
-				case variable:	//¸³ÖµÓï¾ä
+				case variable:	//èµ‹å€¼è¯­å¥
 					assignStatement(0);
-					//´ËÊ±sy == semicolon
+					//æ­¤æ—¶sy == semicolon
 					break;
-				case array:		//±êÊ¶·û[±í´ïÊ½]  ¸³ÖµÓï¾ä
+				case array:		//æ ‡è¯†ç¬¦[è¡¨è¾¾å¼]  èµ‹å€¼è¯­å¥
 					assignStatement(1);
-					//´ËÊ±sy == semicolon
+					//æ­¤æ—¶sy == semicolon
 					break;
 				case function:
-					if (tab.tabArray[pos].type == notyp) {	//ÎŞ·µ»ØÖµº¯Êıµ÷ÓÃ
-						//½øÈëvoUseFuncStatementÊ±,sy == identsy(º¯ÊıÃû)
+					if (tab.tabArray[pos].type == notyp) {	//æ— è¿”å›å€¼å‡½æ•°è°ƒç”¨
+						//è¿›å…¥voUseFuncStatementæ—¶,sy == identsy(å‡½æ•°å)
 						voUseFuncStatement();
 					}
 					else {
-						//½øÈëreUseFuncStatementÊ±,sy == identsy(º¯ÊıÃû)
+						//è¿›å…¥reUseFuncStatementæ—¶,sy == identsy(å‡½æ•°å)
 						reUseFuncStatement();
 					}
 					
-					//´ËÊ± syÎª rparent
+					//æ­¤æ—¶ syä¸º rparent
 					insymbol();
 					if (sy != semicolon) error(19, lc);
 					//sy == semicolon
@@ -1364,24 +1367,24 @@ namespace compiler{
 			else {
 				skip(statement_end_sys, 3);
 			}
-			break;	//´ËÊ± sy == semicolon
-		case scanfsy:	//¶ÁÓï¾ä´¦Àí
-			//½øÈëÊ±sy == scanfsy
+			break;	//æ­¤æ—¶ sy == semicolon
+		case scanfsy:	//è¯»è¯­å¥å¤„ç†
+			//è¿›å…¥æ—¶sy == scanfsy
 			scanfStatement();
-			break;	//´ËÊ± sy == semicolon
-		case printfsy:	//Ğ´Óï¾ä´¦Àí
-			//½øÈëÊ±sy == printfsy
+			break;	//æ­¤æ—¶ sy == semicolon
+		case printfsy:	//å†™è¯­å¥å¤„ç†
+			//è¿›å…¥æ—¶sy == printfsy
 			printfStatement();
-			break;//´ËÊ±sy == semicolon
-		case switchsy:	//Çé¿öÓï¾ä´¦Àí
-			//½øÈëÊ± sy == switchsy
+			break;//æ­¤æ—¶sy == semicolon
+		case switchsy:	//æƒ…å†µè¯­å¥å¤„ç†
+			//è¿›å…¥æ—¶ sy == switchsy
 			switchStatement();
 			if (sy != rcbrack) std::cout << "There is a bug in blockdeal--statement, after switchStatement()" << std::endl;
-			break; //´ËÊ± sy == rcbrack;
-		case returnsy:	//·µ»ØÓï¾ä´¦Àí
-			//½øÈëÊ± sy == returnsy
+			break; //æ­¤æ—¶ sy == rcbrack;
+		case returnsy:	//è¿”å›è¯­å¥å¤„ç†
+			//è¿›å…¥æ—¶ sy == returnsy
 			returnStatement();
-			break;//´ËÊ± sy == semicolon
+			break;//æ­¤æ—¶ sy == semicolon
 		default:
 			error(32, lc);
 			skip(statement_end_sys, 3);
@@ -1389,32 +1392,32 @@ namespace compiler{
 		}
 		if (!find_sy(statement_end_sys, 3)) std::cout << "There is a bug in blockdeal--statement, at the end of the function" << std::endl;
 
-		//³östatementÊ±, syÎª statement_end_sysÖĞµÄÒ»¸ö
+		//å‡ºstatementæ—¶, syä¸º statement_end_sysä¸­çš„ä¸€ä¸ª
 	}
 
-	//<¸´ºÏÓï¾ä>
-	//´«ÈëÖµÎªº¯Êı¾Ö²¿±äÁ¿ËùÕ¼¿Õ¼äµÄ´óĞ¡¡¢·µ»ØÖµÀàĞÍµÄ¡¢Ä¿Ç°±äÁ¿Ëù´¦º¯ÊıÊı¾İÇøÏà¶ÔµØÖ·,·µ»ØÖµÎª¸Ãº¯Êı×îºóÒ»¸ö¾Ö²¿±äÁ¿ÔÚtabÖĞµÄÎ»ÖÃ
+	//<å¤åˆè¯­å¥>
+	//ä¼ å…¥å€¼ä¸ºå‡½æ•°å±€éƒ¨å˜é‡æ‰€å ç©ºé—´çš„å¤§å°ã€è¿”å›å€¼ç±»å‹çš„ã€ç›®å‰å˜é‡æ‰€å¤„å‡½æ•°æ•°æ®åŒºç›¸å¯¹åœ°å€,è¿”å›å€¼ä¸ºè¯¥å‡½æ•°æœ€åä¸€ä¸ªå±€éƒ¨å˜é‡åœ¨tabä¸­çš„ä½ç½®
 	int statementCompond(int& var_size, types& return_typ, int& pv_addr){
-		//Èë¿ÚÊ±syÖ¸µÄÊÇ×óÀ¨ºÅÖ®ºóµÄµÚÒ»¸öµ¥´Ê
-		symbol statementCompond_start_sys[] = { constsy, intsy, charsy, semicolon, ifsy, dosy, lcbrack, ident, scanfsy, printfsy, switchsy, returnsy, rcbrack};//13¸ö
+		//å…¥å£æ—¶syæŒ‡çš„æ˜¯å·¦æ‹¬å·ä¹‹åçš„ç¬¬ä¸€ä¸ªå•è¯
+		symbol statementCompond_start_sys[] = { constsy, intsy, charsy, semicolon, ifsy, dosy, lcbrack, ident, scanfsy, printfsy, switchsy, returnsy, rcbrack};//13ä¸ª
 		types tmp_type;
 		int start_pv_addr = pv_addr;
-		int var_flag = 0;	//ÊÇ·ñÓĞ¾Ö²¿±äÁ¿µÄ±êÖ¾Î»,ÓÃÓÚºóÃæµÄreturn·µ»Ø
+		int var_flag = 0;	//æ˜¯å¦æœ‰å±€éƒ¨å˜é‡çš„æ ‡å¿—ä½,ç”¨äºåé¢çš„returnè¿”å›
 
 		if (!find_sy(statementCompond_start_sys, 13)) {
 			error(32, lc);
 			skip(statementCompond_start_sys, 13);
 		}
 		
-		//¾Ö²¿³£Á¿ÉùÃ÷
+		//å±€éƒ¨å¸¸é‡å£°æ˜
 		while (sy == constsy) {
-			constDeal();	//´ÓconstDealÀïÃæ³öÀ´Ê±syÎª';'ºóÃæµÄµ¥´Ê
+			constDeal();	//ä»constDealé‡Œé¢å‡ºæ¥æ—¶syä¸º';'åé¢çš„å•è¯
 		}
-		skip(statementCompond_start_sys, 13);	//Ìø¶Á, ´ËÊ±sy²»¿ÉÄÜÎªconstsy,·ñÔò³ö²»ÁËÑ­»·
+		skip(statementCompond_start_sys, 13);	//è·³è¯», æ­¤æ—¶syä¸å¯èƒ½ä¸ºconstsy,å¦åˆ™å‡ºä¸äº†å¾ªç¯
 		
 
 
-		//¾Ö²¿±äÁ¿ÉùÃ÷
+		//å±€éƒ¨å˜é‡å£°æ˜
 		while ((sy == intsy) || (sy == charsy)) {
 
 			tmp_type = sy_to_types(sy);
@@ -1429,7 +1432,7 @@ namespace compiler{
 
 			insymbol();
 
-			//test sy ÊÇ·ñÎª comma, semicolon, lsbrack ¶¼²»ÊÇµÄ»°±¨´í
+			//test sy æ˜¯å¦ä¸º comma, semicolon, lsbrack éƒ½ä¸æ˜¯çš„è¯æŠ¥é”™
 			symbol tmpsys[] = { comma, semicolon, lsbrack };
 			if (!find_sy(tmpsys, 3)) {
 				error(28, lc);
@@ -1439,23 +1442,23 @@ namespace compiler{
 				continue;
 			}
 
-			//´ËÊ± sy == comma || sy == semicolon || sy == lsbrack
-			varDeal(tmp_type, pv_addr);	//³öÀ´Ê±¶Áµ½µÃÊÇ';'Ö®ºóµÄµ¥´Ê
+			//æ­¤æ—¶ sy == comma || sy == semicolon || sy == lsbrack
+			varDeal(tmp_type, pv_addr);	//å‡ºæ¥æ—¶è¯»åˆ°å¾—æ˜¯';'ä¹‹åçš„å•è¯
 			var_flag = 1;
 		}
-		var_size = pv_addr - start_pv_addr; //¾Ö²¿±äÁ¿ËùÕ¼µÄ¿Õ¼ä´óĞ¡
+		var_size = pv_addr - start_pv_addr; //å±€éƒ¨å˜é‡æ‰€å çš„ç©ºé—´å¤§å°
 		
-		//´Ó´ËÍùÏÂ²»»áÔÙ½øĞĞenterÏµÁĞ²Ù×÷
+		//ä»æ­¤å¾€ä¸‹ä¸ä¼šå†è¿›è¡Œenterç³»åˆ—æ“ä½œ
 
-		//´Ë´¦Îª±äÁ¿ÉùÃ÷µÄ·ÖºÅ½áÊøÖ®ºóµÄµÚÒ»¸öµ¥´Ê
+		//æ­¤å¤„ä¸ºå˜é‡å£°æ˜çš„åˆ†å·ç»“æŸä¹‹åçš„ç¬¬ä¸€ä¸ªå•è¯
 		symbol tmp_sys[] = { semicolon, ifsy, dosy, lcbrack, ident, scanfsy, printfsy, switchsy, returnsy, rcbrack };
 		skip(tmp_sys, 10);
 
 		while (sy != rcbrack) {
 			skip(statement_start_sys, 9);
-			//½øÈëstatementÊ±, syÎªstatement_start_sysÖĞµÄÔªËØ
-			statement();	//½øÈëÓï¾ä´¦Àíº¯Êı
-			//³östatementÊ±, sy Îª statement_end_sysÖĞµÄÔªËØ
+			//è¿›å…¥statementæ—¶, syä¸ºstatement_start_sysä¸­çš„å…ƒç´ 
+			statement();	//è¿›å…¥è¯­å¥å¤„ç†å‡½æ•°
+			//å‡ºstatementæ—¶, sy ä¸º statement_end_sysä¸­çš„å…ƒç´ 
 			insymbol();
 			if ((sy != rcbrack) && (!find_sy(statement_start_sys, 9))) {
 				error(48,lc);
@@ -1465,19 +1468,19 @@ namespace compiler{
 		
 		if (var_flag == 1) return tab.t - 1;
 		else return btab.btabArray[btab.b-1].lastpar;
-		//³ö¸´ºÏÓï¾ä´¦ÀíÊ±,sy == rcbrack
+		//å‡ºå¤åˆè¯­å¥å¤„ç†æ—¶,sy == rcbrack
 	}
 
-	//<ÎŞ·µ»ØÖµº¯Êı¶¨Òå>
+	//<æ— è¿”å›å€¼å‡½æ•°å®šä¹‰>
 	void voFuncDeal(types typ){
-		//½ø¸ÃÄ£¿éÊ±,sy == lparent
+		//è¿›è¯¥æ¨¡å—æ—¶,sy == lparent
 		//std::cout << "This is a voidFunc declare statement" << std::endl;
 		gram_out_file << "This is a voidFunc declare statement" << std::endl;
-		int para_num = 0, var_size = 0,	pv_addr = 3;	//pv_addr Ïà¶ÔÓÚº¯Êı»ùÖ·µÄÏà¶ÔµØÖ·, 0¡¢1¡¢2ÎªÄÚÎñÇø
-		types return_typ = notyp;//×îºó±È¶Ôreturn_typÓëtypÊÇ·ñÒ»ÖÂ  typÎªÉùÃ÷Ê±µÄ·µ»ØÖµÀàĞÍ
+		int para_num = 0, var_size = 0,	pv_addr = 3;	//pv_addr ç›¸å¯¹äºå‡½æ•°åŸºå€çš„ç›¸å¯¹åœ°å€, 0ã€1ã€2ä¸ºå†…åŠ¡åŒº
+		types return_typ = notyp;//æœ€åæ¯”å¯¹return_typä¸typæ˜¯å¦ä¸€è‡´  typä¸ºå£°æ˜æ—¶çš„è¿”å›å€¼ç±»å‹
 		std::string func_name = id;
 
-		int init_t_num, last_t_num;		//¸Ãº¯Êı¶¨ÒåÖĞµÚÒ»¸öºÍ(×îºóÒ»¸öÁÙÊ±±äÁ¿ + 1) µÄ±àºÅ, ÓÃÓÚºóÃæµÃµ½t_varnumºÍ¸÷¸öÁÙÊ±±äÁ¿µÄÏà¶ÔµØÖ·
+		int init_t_num, last_t_num;		//è¯¥å‡½æ•°å®šä¹‰ä¸­ç¬¬ä¸€ä¸ªå’Œ(æœ€åä¸€ä¸ªä¸´æ—¶å˜é‡ + 1) çš„ç¼–å·, ç”¨äºåé¢å¾—åˆ°t_varnumå’Œå„ä¸ªä¸´æ—¶å˜é‡çš„ç›¸å¯¹åœ°å€
 
 		init_t_num = temp_num;
 
@@ -1486,26 +1489,26 @@ namespace compiler{
 		enter(id, function, typ);
 		enterFunc(tab.t - 1, typ);
 
-		level++;	//½øÈë·Ö³ÌĞò²ã(¾Ö²¿)
-		display[level] = btab.b - 1;	//¸üĞÂµ±Ç°²ã·Ö³ÌĞòµÄË÷Òı±í
+		level++;	//è¿›å…¥åˆ†ç¨‹åºå±‚(å±€éƒ¨)
+		display[level] = btab.b - 1;	//æ›´æ–°å½“å‰å±‚åˆ†ç¨‹åºçš„ç´¢å¼•è¡¨
 
-		//Ñ¹Èëº¯ÊıÉùÃ÷ËÄÔªÊ½Ö¸Áî
+		//å‹å…¥å‡½æ•°å£°æ˜å››å…ƒå¼æŒ‡ä»¤
 		enterMidCode(14, " ", types_info[typ], func_name, 0);
 
 		insymbol();
 
-		if (sy == rparent) {	//ÎŞ²ÎÊı
+		if (sy == rparent) {	//æ— å‚æ•°
 			btab.btabArray[btab.b - 1].lastpar = 0;
 			btab.btabArray[btab.b - 1].paranum = 0;
 			insymbol();
 		}
-		else if ((sy == intsy) || (sy == charsy)) {	//ÓĞ²ÎÊı
-			//ÔÚ²ÎÊı±íÖĞÑ¹ÈëÏàÓ¦µÄËÄÔªÊ½Ö¸Áî
-			btab.btabArray[btab.b - 1].lastpar = paraDeal(para_num, pv_addr);//´¦Àí²ÎÊı±í,³öÀ´ºóÎª')'Ö®ºóµÄµ¥´Ê
+		else if ((sy == intsy) || (sy == charsy)) {	//æœ‰å‚æ•°
+			//åœ¨å‚æ•°è¡¨ä¸­å‹å…¥ç›¸åº”çš„å››å…ƒå¼æŒ‡ä»¤
+			btab.btabArray[btab.b - 1].lastpar = paraDeal(para_num, pv_addr);//å¤„ç†å‚æ•°è¡¨,å‡ºæ¥åä¸º')'ä¹‹åçš„å•è¯
 			btab.btabArray[btab.b - 1].paranum = para_num;
 		}
 		else {
-			//³ö´íÌø¶ÁÖ±µ½Óö¼û×ó´óÀ¨ºÅ
+			//å‡ºé”™è·³è¯»ç›´åˆ°é‡è§å·¦å¤§æ‹¬å·
 			error(31, lc);
 			symbol tmp_sys[] = { lcbrack };
 			skip(tmp_sys, 1);
@@ -1516,60 +1519,60 @@ namespace compiler{
 			skip(tmp_sys, 1);
 		}
 
-		//µ½´ï´Ë´¦µÄÌõ¼şÊÇÓöµ½×ó´óÀ¨ºÅ
+		//åˆ°è¾¾æ­¤å¤„çš„æ¡ä»¶æ˜¯é‡åˆ°å·¦å¤§æ‹¬å·
 
-		//º¯Êı²ÎÊıÉùÃ÷½áÊø,½«gotoÓï¾äÑ¹ÈëËÄÔªÊ½
+		//å‡½æ•°å‚æ•°å£°æ˜ç»“æŸ,å°†gotoè¯­å¥å‹å…¥å››å…ƒå¼
 		//enterMidCode(5, func_name + "_end_", " ", " ", 0);
 
-		//º¯Êı¿ªÊ¼label,Ñ¹ÈëËÄÔªÊ½ setlab
-		enterMidCode(13, " ", " ", creat_label(func_name, 0, MidCodeT.mdc), 4);		//4±íÊ¾º¯Êı¿ªÊ¼±êÇ©
+		//å‡½æ•°å¼€å§‹label,å‹å…¥å››å…ƒå¼ setlab
+		enterMidCode(13, " ", " ", creat_label(func_name, 0, MidCodeT.mdc), 4);		//4è¡¨ç¤ºå‡½æ•°å¼€å§‹æ ‡ç­¾
 
 		insymbol();
 		if (sy == rcbrack) {
-			//Ïàµ±ÓÚ¸´ºÏÓï¾äÖ±½ÓÎª¿Õ,¾Í²»½øÈ¥ÁË,ÃâµÃŞÏŞÎ
+			//ç›¸å½“äºå¤åˆè¯­å¥ç›´æ¥ä¸ºç©º,å°±ä¸è¿›å»äº†,å…å¾—å°´å°¬
 			btab.btabArray[btab.b - 1].last = btab.btabArray[btab.b - 1].lastpar;
 			btab.btabArray[btab.b - 1].varsize = 0;
-			//½áÊøº¯ÊıÌø×ªËÄÔªÊ½ ±¾À´ÊÇÔÚ¸´ºÏÓï¾äÖĞ´¦Àí,µ«ÕâÀïÃ»ÓĞ½øÈëËùÒÔÒª´¦ÀíÒ»ÏÂ
+			//ç»“æŸå‡½æ•°è·³è½¬å››å…ƒå¼ æœ¬æ¥æ˜¯åœ¨å¤åˆè¯­å¥ä¸­å¤„ç†,ä½†è¿™é‡Œæ²¡æœ‰è¿›å…¥æ‰€ä»¥è¦å¤„ç†ä¸€ä¸‹
 			enterMidCode(12, " ", " ", " ", 0);
 		}
 		else {
-			//½øÈë¸´ºÏÓï¾ä,´ËÊ±syÎª×óÀ¨ºÅÖ®ºóµÄµÚÒ»¸öµ¥´Ê
+			//è¿›å…¥å¤åˆè¯­å¥,æ­¤æ—¶syä¸ºå·¦æ‹¬å·ä¹‹åçš„ç¬¬ä¸€ä¸ªå•è¯
 			btab.btabArray[btab.b - 1].last = statementCompond(var_size, return_typ, pv_addr);
 			btab.btabArray[btab.b - 1].varsize = var_size;
-			//if (return_typ != typ)	error(12, lc);	//ÉùÃ÷ÀàĞÍÓë·µ»ØÀàĞÍ²»Æ¥Åä
+			//if (return_typ != typ)	error(12, lc);	//å£°æ˜ç±»å‹ä¸è¿”å›ç±»å‹ä¸åŒ¹é…
 			if ((return_flag != 0) && (return_flag != 1)) error(12, lc - 1);
 			if (MidCodeT.midcodeArray[MidCodeT.mdc - 1].op != 12) {
-				//º¯Êı×îºóÒ»Ìõ²»ÊÇ·µ»ØÓï¾ä
-				enterMidCode(12, " ", " ", " ", 0);	//voidµÄº¯ÊıÖ±½ÓÔö¼ÓÒ»Ìõ,Òª²»Ìø²»»ØÈ¥
+				//å‡½æ•°æœ€åä¸€æ¡ä¸æ˜¯è¿”å›è¯­å¥
+				enterMidCode(12, " ", " ", " ", 0);	//voidçš„å‡½æ•°ç›´æ¥å¢åŠ ä¸€æ¡,è¦ä¸è·³ä¸å›å»
 			}
 		}
 
 		last_t_num = temp_num;
 		btab.btabArray[btab.b - 1].t_varnum = last_t_num - init_t_num;
 
-		//ÉèÖÃT_MAP
+		//è®¾ç½®T_MAP
 		for (int i = init_t_num; i < last_t_num; i++) {
 			int offset = pv_addr + i - init_t_num;
 			T_Map["T" + int_to_string(i)].stack_addr = offset;
 		}
 
-		//´Ë´¦sy == rcbrack²ÅÊÇ´Ó¸´ºÏÓï¾äÖĞÕı³£³öÀ´
+		//æ­¤å¤„sy == rcbrackæ‰æ˜¯ä»å¤åˆè¯­å¥ä¸­æ­£å¸¸å‡ºæ¥
 		if (sy != rcbrack) {
 			std::cout << "There is a bug in blockdeal--voFuncDeal, after the transfer of statementCompond" << std::endl;
 		}
-		//ÔÚ´Ë´¦Ñ¹Èëº¯Êı½áÊø±êÇ©
-		//enterMidCode(13, " ", " ", creat_label(func_name, 1, MidCodeT.mdc), 1);	//´´½¨labelÓëPCµÄ¶ÔÓ¦¹ØÏµÊ±mdcÖ¸µÄ¸ÕºÃÊÇsetlabµÄÎ»ÖÃ,»¹Î´½øĞĞ++²Ù×÷
-		level--;	//ÍË³ö·Ö³ÌĞò²ã
-		insymbol();	//'}'µÄÏÂÒ»¸öµ¥´Ê
+		//åœ¨æ­¤å¤„å‹å…¥å‡½æ•°ç»“æŸæ ‡ç­¾
+		//enterMidCode(13, " ", " ", creat_label(func_name, 1, MidCodeT.mdc), 1);	//åˆ›å»ºlabelä¸PCçš„å¯¹åº”å…³ç³»æ—¶mdcæŒ‡çš„åˆšå¥½æ˜¯setlabçš„ä½ç½®,è¿˜æœªè¿›è¡Œ++æ“ä½œ
+		level--;	//é€€å‡ºåˆ†ç¨‹åºå±‚
+		insymbol();	//'}'çš„ä¸‹ä¸€ä¸ªå•è¯
 	}
 
-	//<ÓĞ·µ»ØÖµº¯Êı¶¨Òå>
+	//<æœ‰è¿”å›å€¼å‡½æ•°å®šä¹‰>
 	void reFuncDeal(types typ){
-		//½ø¸ÃÄ£¿éÊ±,sy == lparent
+		//è¿›è¯¥æ¨¡å—æ—¶,sy == lparent
 		//std::cout << "This is a returnFunc declare statement"<<std::endl;
 		gram_out_file << "This is a returnFunc declare statement" << std::endl;
-		int para_num = 0, var_size = 0, pv_addr = 3;	//pv_addrÎª²ÎÊı¡¢¾Ö²¿±äÁ¿Ïà¶ÔÓÚµ±Ç°Êı¾İÇøµÄÏà¶ÔµØÖ· ´Ó3¿ªÊ¼, 0¡¢1¡¢2µÄÎ»ÖÃÎªÄÚÎñÇø
-		types return_typ = notyp;//×îºó±È¶Ôreturn_typÓëtypÊÇ·ñÒ»ÖÂ  typÎªÉùÃ÷Ê±µÄ·µ»ØÖµÀàĞÍ
+		int para_num = 0, var_size = 0, pv_addr = 3;	//pv_addrä¸ºå‚æ•°ã€å±€éƒ¨å˜é‡ç›¸å¯¹äºå½“å‰æ•°æ®åŒºçš„ç›¸å¯¹åœ°å€ ä»3å¼€å§‹, 0ã€1ã€2çš„ä½ç½®ä¸ºå†…åŠ¡åŒº
+		types return_typ = notyp;//æœ€åæ¯”å¯¹return_typä¸typæ˜¯å¦ä¸€è‡´  typä¸ºå£°æ˜æ—¶çš„è¿”å›å€¼ç±»å‹
 		std::string func_name = id;
 		int init_t_num, last_t_num;
 
@@ -1580,77 +1583,77 @@ namespace compiler{
 		enter(id, function, typ);
 		enterFunc(tab.t - 1, typ);
 		
-		//½øÈëÊ±level = 0, ³öÈ¥Ê±Ò²µÃÊÇ0, º¯ÊıÄÚ²¿´¦ÀíÎª1
-		level++; //µ±Ç°·Ö³ÌĞò²ãÎª1
-		display[level] = btab.b - 1;	//¸üĞÂµ±Ç°²ã·Ö³ÌĞòµÄË÷Òı±í
+		//è¿›å…¥æ—¶level = 0, å‡ºå»æ—¶ä¹Ÿå¾—æ˜¯0, å‡½æ•°å†…éƒ¨å¤„ç†ä¸º1
+		level++; //å½“å‰åˆ†ç¨‹åºå±‚ä¸º1
+		display[level] = btab.b - 1;	//æ›´æ–°å½“å‰å±‚åˆ†ç¨‹åºçš„ç´¢å¼•è¡¨
 
-		//Ñ¹Èëº¯ÊıÉùÃ÷ËÄÔªÊ½Ö¸Áî
+		//å‹å…¥å‡½æ•°å£°æ˜å››å…ƒå¼æŒ‡ä»¤
 		enterMidCode(14," ",types_info[typ],func_name, 0);
 
 		insymbol();
-		if (sy == rparent) {	//ÎŞ²ÎÊı
+		if (sy == rparent) {	//æ— å‚æ•°
 			btab.btabArray[btab.b - 1].lastpar = 0;
 			btab.btabArray[btab.b - 1].paranum = 0;
 			insymbol();
 		}
-		else if ((sy == intsy) || (sy == charsy)) {	//ÓĞ²ÎÊı
-			//ÔÚ²ÎÊı±íÖĞÑ¹ÈëÏàÓ¦µÄËÄÔªÊ½Ö¸Áî
-			btab.btabArray[btab.b-1].lastpar = paraDeal(para_num, pv_addr);//´¦Àí²ÎÊı±í,³öÀ´ºóÎª')'Ö®ºóµÄµ¥´Ê
+		else if ((sy == intsy) || (sy == charsy)) {	//æœ‰å‚æ•°
+			//åœ¨å‚æ•°è¡¨ä¸­å‹å…¥ç›¸åº”çš„å››å…ƒå¼æŒ‡ä»¤
+			btab.btabArray[btab.b-1].lastpar = paraDeal(para_num, pv_addr);//å¤„ç†å‚æ•°è¡¨,å‡ºæ¥åä¸º')'ä¹‹åçš„å•è¯
 			btab.btabArray[btab.b - 1].paranum = para_num;
 		}
 		else {
-			//³ö´íÌø¶ÁÖ±µ½Óö¼û×ó´óÀ¨ºÅ
+			//å‡ºé”™è·³è¯»ç›´åˆ°é‡è§å·¦å¤§æ‹¬å·
 			error(31, lc);
 			symbol tmp_sys[] = { lcbrack };
 			skip(tmp_sys,1);
 		}
-		//´Ó²ÎÊı±í´¦Àí³öÀ´¶ÁµÄµ¥´ÊÊÇ ')'ºóÃæÒ»¸öµ¥´Ê
+		//ä»å‚æ•°è¡¨å¤„ç†å‡ºæ¥è¯»çš„å•è¯æ˜¯ ')'åé¢ä¸€ä¸ªå•è¯
 		if (sy != lcbrack) {
 			error(17,lc);
 			symbol tmp_sys[] = { lcbrack };
 			skip(tmp_sys, 1);
 		}
 
-		//µ½´ï´Ë´¦µÄÌõ¼şÊÇÓöµ½×ó´óÀ¨ºÅ
+		//åˆ°è¾¾æ­¤å¤„çš„æ¡ä»¶æ˜¯é‡åˆ°å·¦å¤§æ‹¬å·
 
-		//º¯Êı²ÎÊıÉùÃ÷½áÊø,½«gotoÓï¾äÑ¹ÈëËÄÔªÊ½
+		//å‡½æ•°å‚æ•°å£°æ˜ç»“æŸ,å°†gotoè¯­å¥å‹å…¥å››å…ƒå¼
 		//enterMidCode(5, func_name + "_end_", " ", " ", 0);
 
-		//º¯Êı¿ªÊ¼label,Ñ¹ÈëËÄÔªÊ½ setlab
+		//å‡½æ•°å¼€å§‹label,å‹å…¥å››å…ƒå¼ setlab
 		enterMidCode(13," ", " ",creat_label(func_name,0,MidCodeT.mdc),4);
 
 		insymbol();
 		if (sy == rcbrack) {
-			//Ïàµ±ÓÚ¸´ºÏÓï¾äÖ±½ÓÎª¿Õ,¾Í²»½øÈ¥ÁË,ÃâµÃŞÏŞÎ
+			//ç›¸å½“äºå¤åˆè¯­å¥ç›´æ¥ä¸ºç©º,å°±ä¸è¿›å»äº†,å…å¾—å°´å°¬
 			btab.btabArray[btab.b - 1].last = btab.btabArray[btab.b - 1].lastpar;
 			btab.btabArray[btab.b - 1].varsize = 0;
-			error(12, lc - 1);	//ÓĞ·µ»ØÖµº¯Êı²Å»á±¨´í
-			//½áÊøº¯ÊıÌø×ªËÄÔªÊ½ ±¾À´ÊÇÔÚ¸´ºÏÓï¾äÖĞ´¦Àí,µ«ÕâÀïÃ»ÓĞ½øÈëËùÒÔÒª´¦ÀíÒ»ÏÂ
+			error(12, lc - 1);	//æœ‰è¿”å›å€¼å‡½æ•°æ‰ä¼šæŠ¥é”™
+			//ç»“æŸå‡½æ•°è·³è½¬å››å…ƒå¼ æœ¬æ¥æ˜¯åœ¨å¤åˆè¯­å¥ä¸­å¤„ç†,ä½†è¿™é‡Œæ²¡æœ‰è¿›å…¥æ‰€ä»¥è¦å¤„ç†ä¸€ä¸‹
 			enterMidCode(12, " ", " ", " ", 0);
 		}
 		else {
-			//½øÈë¸´ºÏÓï¾ä
+			//è¿›å…¥å¤åˆè¯­å¥
 			btab.btabArray[btab.b - 1].last = statementCompond(var_size, return_typ, pv_addr);
 			btab.btabArray[btab.b - 1].varsize = var_size;
-			if (return_flag == 2) {	//·µ»ØÖµÎªints
+			if (return_flag == 2) {	//è¿”å›å€¼ä¸ºints
 				if (typ != ints) error(12, lc - 1);
 			}
-			else if (return_flag == 3) {	//·µ»ØÖµÎªchars
+			else if (return_flag == 3) {	//è¿”å›å€¼ä¸ºchars
 				if (typ != chars) error(12, lc - 1);
 			}
 			else {
 				error(12, lc - 1);
 			}
 			if (MidCodeT.midcodeArray[MidCodeT.mdc - 1].op != 12) {
-				//º¯Êı×îºóÒ»Ìõ²»ÊÇ·µ»ØÓï¾ä
-				enterMidCode(12, " ", " ", " ", 0);	//Ö±½ÓÔö¼ÓÒ»Ìõ,·µ»Øµ÷ÓÃÎ»ÖÃ
+				//å‡½æ•°æœ€åä¸€æ¡ä¸æ˜¯è¿”å›è¯­å¥
+				enterMidCode(12, " ", " ", " ", 0);	//ç›´æ¥å¢åŠ ä¸€æ¡,è¿”å›è°ƒç”¨ä½ç½®
 			}
 		}
 
 		last_t_num = temp_num;
 		btab.btabArray[btab.b - 1].t_varnum = last_t_num - init_t_num;
 
-		//ÉèÖÃT_MAP
+		//è®¾ç½®T_MAP
 		for (int i = init_t_num; i < last_t_num; i++) {
 			int offset = pv_addr + i - init_t_num;
 			T_Map["T" + int_to_string(i)].stack_addr = offset;
@@ -1658,25 +1661,25 @@ namespace compiler{
 
 
 
-		//´Ë´¦sy == rcbrack²ÅÊÇ´Ó¸´ºÏÓï¾äÖĞÕı³£³öÀ´
+		//æ­¤å¤„sy == rcbrackæ‰æ˜¯ä»å¤åˆè¯­å¥ä¸­æ­£å¸¸å‡ºæ¥
 		if (sy != rcbrack) {
 			std::cout << "There is a bug in blockdeal--reFuncDeal, after the transfer of statementCompond" << std::endl;
 		}
-		//ÔÚ´Ë´¦Ñ¹Èëº¯Êı½áÊø±êÇ©
+		//åœ¨æ­¤å¤„å‹å…¥å‡½æ•°ç»“æŸæ ‡ç­¾
 		//enterMidCode(13," "," ",creat_label(func_name, 1, MidCodeT.mdc),1);
 		
-		level--; //ÍË³öµ±Ç°·Ö³ÌĞò²ã
+		level--; //é€€å‡ºå½“å‰åˆ†ç¨‹åºå±‚
 		
-		insymbol();	//'}'µÄÏÂÒ»¸öµ¥´Ê
+		insymbol();	//'}'çš„ä¸‹ä¸€ä¸ªå•è¯
 	}
 
-	//<Ö÷ÔËĞĞº¯Êı´¦Àí>
+	//<ä¸»è¿è¡Œå‡½æ•°å¤„ç†>
 	void mainFuncDeal(){
-		//½øÈë¸ÃÄ£¿éÊ± sy == lparent
+		//è¿›å…¥è¯¥æ¨¡å—æ—¶ sy == lparent
 		//std::cout << "This is a main declare statement" << std::endl;
 		gram_out_file << "This is a main declare statement" << std::endl;
-		int para_num = 0, var_size = 0, pv_addr = 3;	//pv_addr Ïà¶ÔÓÚº¯Êı»ùÖ·µÄÏà¶ÔµØÖ·, 3¸öÄÚÎñÇø,ÎªÁËcallÖ¸Áî·­ÒëÎªmipsµÄÒ»ÖÂĞÔ
-		types return_typ = notyp;//×îºó±È¶Ôreturn_typÓëtypÊÇ·ñÒ»ÖÂ  typÎªÉùÃ÷Ê±µÄ·µ»ØÖµÀàĞÍ
+		int para_num = 0, var_size = 0, pv_addr = 3;	//pv_addr ç›¸å¯¹äºå‡½æ•°åŸºå€çš„ç›¸å¯¹åœ°å€, 3ä¸ªå†…åŠ¡åŒº,ä¸ºäº†callæŒ‡ä»¤ç¿»è¯‘ä¸ºmipsçš„ä¸€è‡´æ€§
+		types return_typ = notyp;//æœ€åæ¯”å¯¹return_typä¸typæ˜¯å¦ä¸€è‡´  typä¸ºå£°æ˜æ—¶çš„è¿”å›å€¼ç±»å‹
 		std::string func_name = "main";
 		int init_t_num, last_t_num;
 
@@ -1686,75 +1689,75 @@ namespace compiler{
 		enter(func_name, function, notyp);
 		enterFunc(tab.t - 1, notyp);
 
-		level++;	//½øÈë·Ö³ÌĞò²ã(¾Ö²¿)
-		display[level] = btab.b - 1;	//¸üĞÂµ±Ç°²ã·Ö³ÌĞòµÄË÷Òı±í
+		level++;	//è¿›å…¥åˆ†ç¨‹åºå±‚(å±€éƒ¨)
+		display[level] = btab.b - 1;	//æ›´æ–°å½“å‰å±‚åˆ†ç¨‹åºçš„ç´¢å¼•è¡¨
 
-		//Ñ¹Èëº¯ÊıÉùÃ÷ËÄÔªÊ½Ö¸Áî
+		//å‹å…¥å‡½æ•°å£°æ˜å››å…ƒå¼æŒ‡ä»¤
 		enterMidCode(14, " ", types_info[notyp], func_name, 0);
 
 		insymbol();
-		if (sy != rparent) {	//mainº¯ÊıÎŞ²ÎÊı
+		if (sy != rparent) {	//mainå‡½æ•°æ— å‚æ•°
 			error(10, lc);
 
 		}
-		//Ö±½ÓÌø¶Áµ½×ó´óÀ¨ºÅ
+		//ç›´æ¥è·³è¯»åˆ°å·¦å¤§æ‹¬å·
 		symbol tmp_sys[] = { lcbrack };
 		skip(tmp_sys, 1);
 
 
-		//º¯Êı¿ªÊ¼label,Ñ¹ÈëËÄÔªÊ½ setlab
-		enterMidCode(13, " ", " ", "main", 2);		//2±êÖ¾Îªmainº¯Êı¿ªÊ¼Î»ÖÃ
+		//å‡½æ•°å¼€å§‹label,å‹å…¥å››å…ƒå¼ setlab
+		enterMidCode(13, " ", " ", "main", 2);		//2æ ‡å¿—ä¸ºmainå‡½æ•°å¼€å§‹ä½ç½®
 
-		//µ½´ï´Ë´¦µÄÌõ¼şÊÇÓöµ½×ó´óÀ¨ºÅ
+		//åˆ°è¾¾æ­¤å¤„çš„æ¡ä»¶æ˜¯é‡åˆ°å·¦å¤§æ‹¬å·
 		insymbol();
 		if (sy == rcbrack) {
-			//Ïàµ±ÓÚ¸´ºÏÓï¾äÖ±½ÓÎª¿Õ,¾Í²»½øÈ¥ÁË,ÃâµÃŞÏŞÎ
+			//ç›¸å½“äºå¤åˆè¯­å¥ç›´æ¥ä¸ºç©º,å°±ä¸è¿›å»äº†,å…å¾—å°´å°¬
 			btab.btabArray[btab.b - 1].last = btab.btabArray[btab.b - 1].lastpar;
 			btab.btabArray[btab.b - 1].varsize = 0;
 		}
 		else {
-			//½øÈë¸´ºÏÓï¾ä
+			//è¿›å…¥å¤åˆè¯­å¥
 			btab.btabArray[btab.b - 1].last = statementCompond(var_size, return_typ, pv_addr);
 			btab.btabArray[btab.b - 1].varsize = var_size;
-			if (return_typ != notyp)	error(12, lc);	//ÉùÃ÷ÀàĞÍÓë·µ»ØÀàĞÍ²»Æ¥Åä
+			if (return_typ != notyp)	error(12, lc);	//å£°æ˜ç±»å‹ä¸è¿”å›ç±»å‹ä¸åŒ¹é…
 			
 		}
 
 		last_t_num = temp_num;
 		btab.btabArray[btab.b - 1].t_varnum = last_t_num - init_t_num;
 
-		//ÉèÖÃT_MAP
+		//è®¾ç½®T_MAP
 		for (int i = init_t_num; i < last_t_num; i++) {
 			int offset = pv_addr + i - init_t_num;
 			T_Map["T" + int_to_string(i)].stack_addr = offset;
 		}
 
-		//´Ë´¦sy == rcbrack²ÅÊÇ´Ó¸´ºÏÓï¾äÖĞÕı³£³öÀ´
+		//æ­¤å¤„sy == rcbrackæ‰æ˜¯ä»å¤åˆè¯­å¥ä¸­æ­£å¸¸å‡ºæ¥
 		if (sy != rcbrack) {
 			std::cout << "There is a bug in blockdeal--mainFuncDeal, after the transfer of statementCompond" << std::endl;
 		}
-		//ÔÚ´Ë´¦Ñ¹Èëº¯Êı½áÊø±êÇ©
+		//åœ¨æ­¤å¤„å‹å…¥å‡½æ•°ç»“æŸæ ‡ç­¾
 		//enterMidCode(13, " ", " ", creat_label(func_name, 1, MidCodeT.mdc), 1);
-		level--;	//ÍË³ö·Ö³ÌĞò²ã
+		level--;	//é€€å‡ºåˆ†ç¨‹åºå±‚
 	}
 
-	// <³ÌĞò> ´¦Àí
+	// <ç¨‹åº> å¤„ç†
 	void block(){
 		types tmp_type;
-		symbol tmp_sy;	//ÅĞ±ğÊÇ·ñÎªmiansyµÄÊ±ºòÊ¹ÓÃ
+		symbol tmp_sy;	//åˆ¤åˆ«æ˜¯å¦ä¸ºmiansyçš„æ—¶å€™ä½¿ç”¨
 		int global_var_addr = 0, global_var_num = 0;
 		gram_out_file.open("some_info_out/gram_output.txt", std::fstream::out);
 
 		insymbol();
 		skip(block_start_sys, 4);
-		//½øĞĞconst´¦Àí
+		//è¿›è¡Œconstå¤„ç†
 		while(sy == constsy){
-			constDeal();	//´ÓconstDealÀïÃæ³öÀ´Ê±syÎª';'ºóÃæµÄµ¥´Ê
+			constDeal();	//ä»constDealé‡Œé¢å‡ºæ¥æ—¶syä¸º';'åé¢çš„å•è¯
 		}
 
-		//È«¾Ö±äÁ¿´¦Àí
+		//å…¨å±€å˜é‡å¤„ç†
 		while(1){
-			skip(block_start_sys, 4);//¼ì²â sy ÊÇ·ñÎª constsy, intsy, charsy »òÕß voidsy, ¶¼²»ÊÇµÄ»°Ìø¶Á
+			skip(block_start_sys, 4);//æ£€æµ‹ sy æ˜¯å¦ä¸º constsy, intsy, charsy æˆ–è€… voidsy, éƒ½ä¸æ˜¯çš„è¯è·³è¯»
 			if (sy == constsy) {
 				error(29, lc);
 				insymbol();
@@ -1774,7 +1777,7 @@ namespace compiler{
 
 			insymbol();
 
-			//test sy ÊÇ·ñÎª comma, semicolon, lparent, lsbrack ¶¼²»ÊÇµÄ»°±¨´í
+			//test sy æ˜¯å¦ä¸º comma, semicolon, lparent, lsbrack éƒ½ä¸æ˜¯çš„è¯æŠ¥é”™
 			symbol tmpsys[] = { comma, semicolon, lparent, lsbrack};
 			if (!find_sy(tmpsys, 4)) {
 				error(28, lc);
@@ -1784,48 +1787,48 @@ namespace compiler{
 				continue;
 			}
 
-			if(sy == lparent) break;	//º¯Êı¶¨Òå
-			//½ø±äÁ¿¶¨ÒåÖ®Ç°µÄÌõ¼ş
-			if (tmp_type == voidsy) {	//±äÁ¿Ö»ÄÜÊÇchar»òÕßintÀàĞÍ
+			if(sy == lparent) break;	//å‡½æ•°å®šä¹‰
+			//è¿›å˜é‡å®šä¹‰ä¹‹å‰çš„æ¡ä»¶
+			if (tmp_type == voidsy) {	//å˜é‡åªèƒ½æ˜¯charæˆ–è€…intç±»å‹
 				error(28, lc);
 				skip(block_start_sys, 4);
 				//std::cout << "This is a var_declare statement" << std::endl;
 				gram_out_file << "This is var_declare statement" << std::endl;
 				continue;
 			}
-			varDeal(tmp_type,global_var_addr);	//³öÀ´Ê±¶Áµ½µÃÊÇ';'Ö®ºóµÄµ¥´Ê
+			varDeal(tmp_type,global_var_addr);	//å‡ºæ¥æ—¶è¯»åˆ°å¾—æ˜¯';'ä¹‹åçš„å•è¯
 		}
 
 
-		//´¦Àíbtab.btabArray[0],°ÑÈ«¾Ö¼Ó½øÈ¥
+		//å¤„ç†btab.btabArray[0],æŠŠå…¨å±€åŠ è¿›å»
 		btab.btabArray[0].last = tab.t - 1;
-		btab.btabArray[0].varsize = global_var_addr; //È«¾Ö±äÁ¿ËùÕ¼Êı¾İÇøµÄ×Ü´óĞ¡
+		btab.btabArray[0].varsize = global_var_addr; //å…¨å±€å˜é‡æ‰€å æ•°æ®åŒºçš„æ€»å¤§å°
 
-		//°ÑÈ«¾Ö±äÁ¿Ñ¹Õ»
+		//æŠŠå…¨å±€å˜é‡å‹æ ˆ
 		for (int i = 0; i < tab.t; i++) {
-			Stack.space[Stack.topaddr++] = tab.tabArray[i].adr;//°ÑÈ«¾Ö±äÁ¿µÄÖµÑ¹½øÈ¥
+			Stack.space[Stack.topaddr++] = tab.tabArray[i].adr;//æŠŠå…¨å±€å˜é‡çš„å€¼å‹è¿›å»
 		}
-		Stack.globalvaraddr = 0;	//È«¾Ö±äÁ¿¿ªÊ¼µÄÎ»ÖÃÎª0
+		Stack.globalvaraddr = 0;	//å…¨å±€å˜é‡å¼€å§‹çš„ä½ç½®ä¸º0
 		
 
 
-		//´ÓÈ«¾Ö±äÁ¿´¦Àí³öÀ´µÄÌõ¼ş:  sy == lparent
+		//ä»å…¨å±€å˜é‡å¤„ç†å‡ºæ¥çš„æ¡ä»¶:  sy == lparent
 		if (sy != lparent) {
 			std::cout << "There is a bug in blockdeal, before funcDeal" << std::endl;
 		}
 
 		if (tmp_sy != mainsy) {
-			//´¦Àí³öÀ´ÒÔºóµÄµÚÒ»¸öº¯Êı
-			if (tmp_type == notyp) {	//ÎŞ·µ»ØÖµº¯Êı¶¨Òå
+			//å¤„ç†å‡ºæ¥ä»¥åçš„ç¬¬ä¸€ä¸ªå‡½æ•°
+			if (tmp_type == notyp) {	//æ— è¿”å›å€¼å‡½æ•°å®šä¹‰
 				voFuncDeal(tmp_type);
 			}
-			else {		//ÓĞ·µ»Øº¯Êı¶¨Òå
+			else {		//æœ‰è¿”å›å‡½æ•°å®šä¹‰
 				reFuncDeal(tmp_type);
 			}
-			//´Óº¯Êı´¦Àí³öÀ´ºóÎª'}'ºóÃæÒ»¸öµ¥´Ê
-			//Ñ­»·´¦ÀíÊ£ÏÂµÄº¯Êı,´Óint¡¢char»òÕßvoid¿ªÊ¼
+			//ä»å‡½æ•°å¤„ç†å‡ºæ¥åä¸º'}'åé¢ä¸€ä¸ªå•è¯
+			//å¾ªç¯å¤„ç†å‰©ä¸‹çš„å‡½æ•°,ä»intã€charæˆ–è€…voidå¼€å§‹
 			while (1) {
-				skip(block_start_sys, 4);	//¼ì²â sy ÊÇ·ñÎª constsy, intsy, charsy »òÕß voidsy, ¶¼²»ÊÇµÄ»°Ìø¶Á
+				skip(block_start_sys, 4);	//æ£€æµ‹ sy æ˜¯å¦ä¸º constsy, intsy, charsy æˆ–è€… voidsy, éƒ½ä¸æ˜¯çš„è¯è·³è¯»
 				if (sy == constsy) {
 					error(29, lc);
 					insymbol();
@@ -1849,15 +1852,15 @@ namespace compiler{
 					continue;
 				}
 
-				//ÔÚ´ËÎ»ÖÃ sy == lparent;
-				if (tmp_sy == mainsy) break;	//Ö÷ÔËĞĞº¯Êı
-				if (tmp_type == notyp) {	//ÎŞ·µ»ØÖµº¯Êı¶¨Òå
+				//åœ¨æ­¤ä½ç½® sy == lparent;
+				if (tmp_sy == mainsy) break;	//ä¸»è¿è¡Œå‡½æ•°
+				if (tmp_type == notyp) {	//æ— è¿”å›å€¼å‡½æ•°å®šä¹‰
 					voFuncDeal(tmp_type);
 				}
-				else {		//ÓĞ·µ»Øº¯Êı¶¨Òå
+				else {		//æœ‰è¿”å›å‡½æ•°å®šä¹‰
 					reFuncDeal(tmp_type);
 				}
-				//´òÓ¡tabĞÅÏ¢
+				//æ‰“å°tabä¿¡æ¯
 				//printTab();
 				//printATab();
 				//printBTab();
@@ -1865,21 +1868,21 @@ namespace compiler{
 			}
 		}
 
-		//³ÌĞòÔËĞĞµ½´Ë²½ÖèµÄÌõ¼şÊÇtmp_syÎªmainsy
-		//ÇÒ sy == lparent
+		//ç¨‹åºè¿è¡Œåˆ°æ­¤æ­¥éª¤çš„æ¡ä»¶æ˜¯tmp_syä¸ºmainsy
+		//ä¸” sy == lparent
 		if (tmp_sy != mainsy) {
 			std::cout << "There is a bug in blockdeal, before mainFuncDeal" << std::endl;
 		}
 		//std::cout << "Begin main deal" << std::endl;
-		//mainº¯Êı´¦Àí,´ËÊ±idÎªmain,syÎªmainsy
-		if (tmp_type != notyp) {	//´ËÊ±³öÏÖnotypÖ»ÄÜÊÇvoid,ÒòÎªÔÚÉÏÊöwhileÀïÃæµÄmainº¯ÊıbreakÇ°Ãæ½øĞĞÁËskip¼ì²â
+		//mainå‡½æ•°å¤„ç†,æ­¤æ—¶idä¸ºmain,syä¸ºmainsy
+		if (tmp_type != notyp) {	//æ­¤æ—¶å‡ºç°notypåªèƒ½æ˜¯void,å› ä¸ºåœ¨ä¸Šè¿°whileé‡Œé¢çš„mainå‡½æ•°breakå‰é¢è¿›è¡Œäº†skipæ£€æµ‹
 			error(10, lc);
 		}
-		//½øÈëÊ±sy == lparent
+		//è¿›å…¥æ—¶sy == lparent
 		mainFuncDeal();
 
-		//ÍË³öÊ± sy == rcbrack
-		//´òÓ¡tabĞÅÏ¢
+		//é€€å‡ºæ—¶ sy == rcbrack
+		//æ‰“å°tabä¿¡æ¯
 		printTab();
 		printATab();
 		printBTab();
